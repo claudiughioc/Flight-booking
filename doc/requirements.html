@@ -1,0 +1,471 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  dir="ltr" lang="ro" xml:lang="ro" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>L-4-SPRC-C3: Temă (2.2): Tema 4 - Serviciu web pentru rezervarea biletelor de avion</title>
+    <link rel="shortcut icon" href="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/theme/1351442742/favicon" />
+    <meta name="description" content="" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="moodle, L-4-SPRC-C3: Temă (2.2): Tema 4 - Serviciu web pentru rezervarea biletelor de avion" />
+<link rel="stylesheet" type="text/css" href="http://cs.curs.pub.ro/2012/theme/yui_combo.php?3.5.1/build/cssreset/reset-min.css&amp;3.5.1/build/cssfonts/fonts-min.css&amp;3.5.1/build/cssgrids/grids-min.css&amp;3.5.1/build/cssbase/base-min.css" /><script type="text/javascript" src="http://cs.curs.pub.ro/2012/theme/yui_combo.php?3.5.1/build/yui/yui-min.js"></script><script type="text/javascript" src="http://cs.curs.pub.ro/2012/theme/yui_combo.php?2.9.0/build/yahoo/yahoo-min.js&amp;2.9.0/build/dom/dom-min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cs.curs.pub.ro/2012/theme/yui_combo.php?2.9.0/build/assets/skins/sam/skin.css" />
+<script id="firstthemesheet" type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script><link rel="stylesheet" type="text/css" href="http://cs.curs.pub.ro/2012/theme/styles.php/sky_high/1351442742/all" />
+<script type="text/javascript">
+//<![CDATA[
+var M = {}; M.yui = {}; var moodleConfigFn = function(me) {var p = me.path, b = me.name.replace(/^moodle-/,'').split('-', 3), n = b.pop();if (/(skin|core)/.test(n)) {n = b.pop();me.type = 'css';};me.path = b.join('-')+'/'+n+'/'+n+'.'+me.type;}; var galleryConfigFn = function(me) {var p = me.path,v=M.yui.galleryversion,f;if(/-(skin|core)/.test(me.name)) {me.type = 'css';p = p.replace(/-(skin|core)/, '').replace(/\.js/, '.css').split('/'), f = p.pop().replace(/(\-(min|debug))/, '');if (/-skin/.test(me.name)) {p.splice(p.length,0,v,'assets','skins','sam', f);} else {p.splice(p.length,0,v,'assets', f);};} else {p = p.split('/'), f = p.pop();p.splice(p.length,0,v, f);};me.path = p.join('/');};
+M.yui.loader = {"base":"http:\/\/cs.curs.pub.ro\/2012\/lib\/yui\/3.5.1\/build\/","comboBase":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?","combine":true,"filter":"","insertBefore":"firstthemesheet","modules":{"yui2-event":{"type":"js","requires":["yui2-yahoo"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/event\/event-min.js","async":false},"yui2-animation":{"type":"js","requires":["yui2-dom","yui2-event"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/animation\/animation-min.js","async":false},"yui2-swfstore":{"type":"js","requires":["yui2-element","yui2-cookie","yui2-swf"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/swfstore\/swfstore-min.js","async":false},"yui2-datatable":{"requires":["yui2-element","yui2-datasource"],"type":"js","optional":["yui2-calendar","yui2-dragdrop","yui2-paginator"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/datatable\/datatable-min.js","async":false},"yui2-swfdetect":{"type":"js","requires":["yui2-yahoo"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/swfdetect\/swfdetect-min.js","async":false},"yui2-menu":{"requires":["yui2-containercore"],"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/menu\/menu-min.js","async":false},"yui2-treeview":{"requires":["yui2-event","yui2-dom"],"type":"js","optional":["yui2-json","yui2-animation","yui2-calendar"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/treeview\/treeview-min.js","async":false},"yui2-get":{"type":"js","requires":["yui2-yahoo"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/get\/get-min.js","async":false},"yui2-progressbar":{"requires":["yui2-element"],"type":"js","optional":["yui2-animation"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/progressbar\/progressbar-min.js","async":false},"yui2-uploader":{"type":"js","requires":["yui2-element"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/uploader\/uploader-min.js","async":false},"yui2-datasource":{"requires":["yui2-event"],"type":"js","optional":["yui2-connection"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/datasource\/datasource-min.js","async":false},"yui2-profiler":{"type":"js","requires":["yui2-yahoo"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/profiler\/profiler-min.js","async":false},"yui2-connection":{"supersedes":["yui2-connectioncore"],"requires":["yui2-event"],"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/connection\/connection-min.js","async":false},"yui2-json":{"type":"js","requires":["yui2-yahoo"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/json\/json-min.js","async":false},"yui2-datemath":{"type":"js","requires":["yui2-yahoo"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/datemath\/datemath-min.js","async":false},"yui2-calendar":{"supersedes":["yui2-datemath"],"requires":["yui2-event","yui2-dom"],"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/calendar\/calendar-min.js","async":false},"yui2-simpleeditor":{"requires":["yui2-element"],"type":"js","optional":["yui2-containercore","yui2-menu","yui2-button","yui2-animation","yui2-dragdrop"],"pkg":"editor","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/editor\/simpleeditor-min.js","async":false},"yui2-swf":{"supersedes":["yui2-swfdetect"],"requires":["yui2-element"],"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/swf\/swf-min.js","async":false},"yui2-event-simulate":{"type":"js","requires":["yui2-event"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/event-simulate\/event-simulate-min.js","async":false},"yui2-yuiloader-dom-event":{"supersedes":["yui2-yahoo","yui2-dom","yui2-event","yui2-get","yui2-yuiloader","yui2-yahoo-dom-event"],"rollup":5,"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/yuiloader-dom-event\/yuiloader-dom-event.js","async":false},"yui2-storage":{"requires":["yui2-yahoo","yui2-event","yui2-cookie"],"type":"js","optional":["yui2-swfstore"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/storage\/storage-min.js","async":false},"yui2-container":{"supersedes":["yui2-containercore"],"requires":["yui2-dom","yui2-event"],"type":"js","optional":["yui2-dragdrop","yui2-animation","yui2-connection"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/container\/container-min.js","async":false},"yui2-profilerviewer":{"requires":["yui2-profiler","yui2-yuiloader","yui2-element"],"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/profilerviewer\/profilerviewer-min.js","async":false},"yui2-imagecropper":{"requires":["yui2-dragdrop","yui2-element","yui2-resize"],"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/imagecropper\/imagecropper-min.js","async":false},"yui2-paginator":{"requires":["yui2-element"],"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/paginator\/paginator-min.js","async":false},"yui2-tabview":{"requires":["yui2-element"],"type":"js","optional":["yui2-connection"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/tabview\/tabview-min.js","async":false},"yui2-layout":{"requires":["yui2-element"],"type":"js","optional":["yui2-animation","yui2-dragdrop","yui2-resize","yui2-selector"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/layout\/layout-min.js","async":false},"yui2-imageloader":{"type":"js","requires":["yui2-event","yui2-dom"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/imageloader\/imageloader-min.js","async":false},"yui2-containercore":{"requires":["yui2-dom","yui2-event"],"type":"js","pkg":"container","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/container\/container_core-min.js","async":false},"yui2-event-mouseenter":{"type":"js","requires":["yui2-dom","yui2-event"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/event-mouseenter\/event-mouseenter-min.js","async":false},"yui2-logger":{"requires":["yui2-event","yui2-dom"],"type":"js","optional":["yui2-dragdrop"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/logger\/logger-min.js","async":false},"yui2-cookie":{"type":"js","requires":["yui2-yahoo"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/cookie\/cookie-min.js","async":false},"yui2-stylesheet":{"type":"js","requires":["yui2-yahoo"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/stylesheet\/stylesheet-min.js","async":false},"yui2-connectioncore":{"requires":["yui2-event"],"type":"js","pkg":"connection","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/connection\/connection_core-min.js","async":false},"yui2-utilities":{"supersedes":["yui2-yahoo","yui2-event","yui2-dragdrop","yui2-animation","yui2-dom","yui2-connection","yui2-element","yui2-yahoo-dom-event","yui2-get","yui2-yuiloader","yui2-yuiloader-dom-event"],"rollup":8,"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/utilities\/utilities.js","async":false},"yui2-dragdrop":{"type":"js","requires":["yui2-dom","yui2-event"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/dragdrop\/dragdrop-min.js","async":false},"yui2-colorpicker":{"requires":["yui2-slider","yui2-element"],"type":"js","optional":["yui2-animation"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/colorpicker\/colorpicker-min.js","async":false},"yui2-event-delegate":{"requires":["yui2-event"],"type":"js","optional":["yui2-selector"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/event-delegate\/event-delegate-min.js","async":false},"yui2-yuiloader":{"type":"js","supersedes":["yui2-yahoo","yui2-get"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/yuiloader\/yuiloader-min.js","async":false},"yui2-button":{"requires":["yui2-element"],"type":"js","optional":["yui2-menu"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/button\/button-min.js","async":false},"yui2-resize":{"requires":["yui2-dragdrop","yui2-element"],"type":"js","optional":["yui2-animation"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/resize\/resize-min.js","async":false},"yui2-element":{"requires":["yui2-dom","yui2-event"],"type":"js","optional":["yui2-event-mouseenter","yui2-event-delegate"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/element\/element-min.js","async":false},"yui2-history":{"type":"js","requires":["yui2-event"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/history\/history-min.js","async":false},"yui2-yahoo":{"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/yahoo\/yahoo-min.js","async":false},"yui2-element-delegate":{"type":"js","requires":["yui2-element"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/element-delegate\/element-delegate-min.js","async":false},"yui2-charts":{"type":"js","requires":["yui2-element","yui2-json","yui2-datasource","yui2-swf"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/charts\/charts-min.js","async":false},"yui2-slider":{"requires":["yui2-dragdrop"],"type":"js","optional":["yui2-animation"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/slider\/slider-min.js","async":false},"yui2-selector":{"type":"js","requires":["yui2-yahoo","yui2-dom"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/selector\/selector-min.js","async":false},"yui2-yuitest":{"requires":["yui2-logger"],"type":"js","optional":["yui2-event-simulate"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/yuitest\/yuitest-min.js","async":false},"yui2-carousel":{"requires":["yui2-element"],"type":"js","optional":["yui2-animation"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/carousel\/carousel-min.js","async":false},"yui2-autocomplete":{"requires":["yui2-dom","yui2-event","yui2-datasource"],"type":"js","optional":["yui2-connection","yui2-animation"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/autocomplete\/autocomplete-min.js","async":false},"yui2-yahoo-dom-event":{"supersedes":["yui2-yahoo","yui2-event","yui2-dom"],"rollup":3,"type":"js","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/yahoo-dom-event\/yahoo-dom-event.js","async":false},"yui2-dom":{"type":"js","requires":["yui2-yahoo"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/dom\/dom-min.js","async":false},"yui2-editor":{"supersedes":["yui2-simpleeditor"],"requires":["yui2-menu","yui2-element","yui2-button"],"type":"js","optional":["yui2-animation","yui2-dragdrop"],"fullpath":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?2.9.0\/build\/editor\/editor-min.js","async":false},"core_filepicker":{"name":"core_filepicker","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/lib\/javascript.php\/1351442742\/repository\/filepicker.js","requires":["base","node","node-event-simulate","json","async-queue","io-base","io-upload-iframe","io-form","yui2-treeview","panel","cookie","datatable","datatable-sort","resize-plugin","dd-plugin","moodle-core_filepicker"]},"core_dock":{"name":"core_dock","fullpath":"http:\/\/cs.curs.pub.ro\/2012\/lib\/javascript.php\/1351442742\/blocks\/dock.js","requires":["base","node","event-custom","event-mouseenter","event-resize"]}},"groups":{"moodle":{"name":"moodle","base":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?moodle\/1351442742\/","comboBase":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?","combine":true,"filter":"","ext":false,"root":"moodle\/1351442742\/","patterns":{"moodle-":{"group":"moodle","configFn":moodleConfigFn},"root":"moodle"}},"local":{"name":"gallery","base":"http:\/\/cs.curs.pub.ro\/2012\/lib\/yui\/gallery\/","comboBase":"http:\/\/cs.curs.pub.ro\/2012\/theme\/yui_combo.php?","combine":true,"filter":"","ext":false,"root":"gallery\/","patterns":{"gallery-":{"group":"gallery","configFn":galleryConfigFn},"root":"gallery"}}}};
+M.cfg = {"wwwroot":"http:\/\/cs.curs.pub.ro\/2012","sesskey":"SX4BYwsMdu","loadingicon":"http:\/\/cs.curs.pub.ro\/2012\/theme\/image.php\/sky_high\/core\/1351442742\/i\/loading_small","themerev":"1351442742","slasharguments":1,"theme":"sky_high","jsrev":"1351442742"};
+//]]>
+</script>
+<script type="text/javascript" src="http://cs.curs.pub.ro/2012/lib/javascript.php/1351442742/lib/javascript-static.js"></script>
+<script type="text/javascript" src="http://cs.curs.pub.ro/2012/theme/javascript.php/sky_high/1351442742/head"></script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-3568376-26']);
+  _gaq.push(['_setDomainName', '.curs.pub.ro']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script></head>
+<body id="page-mod-assignment-view" class=" path-mod path-mod-assignment safari dir-ltr lang-ro yui-skin-sam yui3-skin-sam cs-curs-pub-ro--2012 pagelayout-incourse course-141 context-20525 cmid-3147 category-13 side-pre-only has_custom_menu background">
+<div class="skiplinks"><a class="skip" href="#maincontent">Salt la conţinutul principal</a></div>
+<script type="text/javascript">
+//<![CDATA[
+document.body.className += ' jsenabled';
+//]]>
+</script>
+
+
+<div id="page">
+    <div id="wrapper" class="clearfix">
+
+<!-- START OF HEADER -->
+
+    <div id="page-header" class="clearfix">
+        <div id="page-header-wrapper">
+                            <img class="logo" src="/2012/local/upb_curs/images/logo/UPB_header_logo_cs.png" alt="Custom logo here" /><h1 class="headerwlogo">- Sisteme de programe pentru reţele de calculatoare (Seria: C3)</h1>
+            
+            <div class="headermenu">
+                <div class="logininfo">Sunteţi autentificat ca <a href="http://cs.curs.pub.ro/2012/user/profile.php?id=1834">Constantin-Claudiu GHIOC</a>  (<a href="http://cs.curs.pub.ro/2012/login/logout.php?sesskey=SX4BYwsMdu">Ieşire</a>)</div>            </div>
+        </div>
+    </div>
+
+<!-- END OF HEADER -->
+
+<!-- START OF CONTENT -->
+      <div id="custommenu"><div id="custom_menu_1" class="yui3-menu yui3-menu-horizontal javascript-disabled"><div class="yui3-menu-content"><ul><li class="yui3-menuitem"><a class="yui3-menuitem-content" title="Cursuri UPB" href="http://www.curs.pub.ro">Cursuri UPB</a></li><li class="yui3-menuitem"><a class="yui3-menuitem-content" title="Portal studenti" href="https://studenti.pub.ro">Portal studenti</a></li><li><a class="yui3-menu-label" title="Ajutor Site" href="#cm_submenu_1">Ajutor Site</a><div id="cm_submenu_1" class="yui3-menu custom_menu_submenu"><div class="yui3-menu-content"><ul><li class="yui3-menuitem"><a class="yui3-menuitem-content" title="Tips&amp;Tricks Wiki" href="http://www.curs.pub.ro">Tips&Tricks Wiki</a></li><li class="yui3-menuitem"><a class="yui3-menuitem-content" title="Moodle Docs" href="http://docs.moodle.org/">Moodle Docs</a></li></ul></div></div></li></ul></div></div></div>
+<div class="navbar clearfix">
+        <div class="breadcrumb"><span class="accesshide">Cale pagină</span><ul><li><a title="Pagina mea" href="http://cs.curs.pub.ro/2012/my/">Pagina mea</a></li><li> <span class="accesshide " ><span class="arrow_text">/</span>&nbsp;</span><span class="arrow sep">&#x25BA;</span> <span tabindex="0">Cursurile mele</span></li><li> <span class="accesshide " ><span class="arrow_text">/</span>&nbsp;</span><span class="arrow sep">&#x25BA;</span> <a title="Sisteme de programe pentru reţele de calculatoare (Seria: C3)" href="http://cs.curs.pub.ro/2012/course/view.php?id=141">L-4-SPRC-C3</a></li><li> <span class="accesshide " ><span class="arrow_text">/</span>&nbsp;</span><span class="arrow sep">&#x25BA;</span> <span tabindex="0"> 17 decembrie -  23 decembrie</span></li><li> <span class="accesshide " ><span class="arrow_text">/</span>&nbsp;</span><span class="arrow sep">&#x25BA;</span> <a title="Temă (2.2)" href="http://cs.curs.pub.ro/2012/mod/assignment/view.php?id=3147">... Serviciu web pentru rezervarea biletelor de avion</a></li></ul></div>
+    <div class="navbutton"> </div>
+    </div>
+
+<div id="page-content-wrapper">
+    <div id="page-content">
+        <div id="region-main-box">
+            <div id="region-post-box">
+
+                <div id="region-main-wrap">
+                    <div id="region-main">
+                        <div class="region-content">
+                            <span id="maincontent"></span><div class="reportlink"></div><div class="clearer"></div><div id="intro" class="box generalbox boxaligncenter"><div class="no-overflow"><h1 style="text-align: justify;">
+  <span style="font-size: large;">Serviciu web pentru rezervarea
+  biletelor de avion</span>
+</h1>
+<p style="text-align: justify;">
+  O agentie de voiaj pune la dispozitia clientilor un serviciu web
+  pentru rezervarea si cumpararea de bilete de avion. Se cere
+  implementarea unui astfel de serviciu web si si a unor clase
+  ajutatoare, conform cu urmatoarele cerinte:
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->serviciul web, AirplaneService, ofera metode pentru
+  aflarea rutei optime intre doua destinatii, pentru rezervare si
+  pentru cumparare de bilete
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->evidenta zborurilor, a rezervarilor si a biletelor
+  cumparate se tine intr-o baza de date MySQL.
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->pentru administrarea informatiilor legate de
+  zboruri se va implementa o aplicatie Java stand-alone care se
+  conecteaza la aceeasi baza de date prin JDBC.
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->pentru testare se va scrie un client pentru
+  serviciul web, cu o interfata de tip text ce va contine un meniu
+  cu operatiile posibile. Clientul va avea ca parametru in linia de
+  comanda URL-ul corespunzator serviciului.
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->se vor utiliza versiunile de Axis si Tomcat
+  indicate in laborator. ATENTIE: se va specifica in fisierul
+  readme alegerea facuta pentru rezolvarea temei!
+</p>
+<p style="margin-top: 12.25pt; text-align: justify;">
+  <span style=
+  "font-size: 13.5pt; font-family: sans-serif;">Informatii
+  referitoare la zboruri</span>
+</p>
+<p style="text-align: justify;">
+  Pentru fiecare zbor se vor retine cel putin urmatoarele
+  informatii:
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->ID (de tip String)
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->sursa si destinatia (ambele de tip String)
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->ora de plecare (de tip int, intre 0 si 23) – se
+  considera ca toate plecarile sunt la ore “fixe”
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->ziua plecarii (de tip int, intre 1 si 365) – se
+  considera zborurile dintr-un singur an; zborurile din zile
+  diferite, de la aceeasi ora, vor avea ID-uri diferite
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->durata zborului (de tip int) – se considera ca este
+  un numar intreg de ore
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->numarul de locuri disponibile
+</p>
+<p style=
+"font-style: italic; font-weight: bold; margin-top: 12.25pt; text-align: justify">
+<span style="font-size: 13.5pt; font-family: sans-serif;">Interfata
+serviciului web</span>
+</p>
+<p style="text-align: justify;">
+  Serviciul va oferi urmatoarele metode:
+</p>
+<p style="font-weight: bold; text-align: justify">
+  1. String[] getOptimalRoute(String source, String dest, int
+  maxFlights, int departureDay)
+</p>
+<p style="text-align: justify;">
+  Unde: source si dest au semnificatiile evidente, maxFlights este
+  numarul maxim de zboruri pe care il poate contine ruta, iar
+  departureDay este un numar intre 1 si 365, reprezentand ziua din
+  an in care se doreste sa aiba loc plecarea (se considera doar ani
+  avand 365 de zile). Se cere gasirea unei rute de timp minim,
+  tinand cont atat de duratele zborurilor cat si de duratele
+  escalelor; de asemenea ruta trebuie sa nu aiba mai mult de
+  maxFlights zboruri. In plus, orice pasager doreste sa fie acasa
+  cu familia de Anul Nou, asa ca nu se admit programe de zbor care
+  incep intr-un an si se termina in celalalt (in evidenta companiei
+  sunt doar zboruri din anul curent). Precizari suplimentare
+  referitoare la ruta:
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->NU se tine cont de diferentele de fus orar intre
+  diferite orase (se presupune ca toate au aceeasi ora)
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->o ruta poate dura mai mult de o zi
+</p>
+<p style="text-align: justify;">
+  Tabloul de siruri intors de functie va contine:
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->pe prima pozitie: un sir cu informatii
+  “human-readable” despre ruta (pentru fiecare zbor, ID-ul, sursa,
+  destinatia, ora de plecare, durata etc.)
+</p>
+<p style=
+"margin-left: 36pt; text-align: justify; text-indent: -18pt;">
+  <!--[if !supportLists]--><span style=
+  "font-size: 10pt; font-family: symbol;"><span>· </span></span>
+  <!--[endif]-->pe urmatoarele pozitii: ID-urile fiecarui zbor din
+  ruta, in ordinea in sursa -&gt; destinatie
+</p>
+<p style="font-weight: bold; text-align: justify">
+  2. String bookTicket(String[] flightIDs)
+</p>
+<p style="text-align: justify;">
+  Prin aceasta metoda se face o rezervare pentru o anumita ruta.
+  Parametrul flightIDs contine ID-urile zborurilor din ruta, care
+  pot fi obtinute prin functia getOptimalRoute(). Metoda intoarce
+  un ID al rezervarii, sau un sir vid in cazul in care nu s-a putut
+  face rezervarea (nu mai sunt locuri disponibile, unul din zboruri
+  a fost anulat etc.)
+</p>
+<p style="font-weight: bold; text-align: justify">
+  3. String buyTicket(String reservationID, String
+  creditCardInformation)
+</p>
+<p style="text-align: justify;">
+  Prin aceasta metoda se cumpara un bilet pentru o ruta pentru care
+  s-a facut deja rezervare. Ca parametru se da ID-ul rezervarii,
+  iar rezultatul intors de functie este un boarding pass continand
+  toare informatiile despre zboruri, sau sirul vid in caz de
+  eroare.
+</p>
+<p style=
+"font-style: italic; font-weight: bold; margin-top: 12.25pt; text-align: justify">
+<span style="font-size: 13.5pt; font-family: sans-serif;">Aplicatia
+de administrare</span>
+</p>
+<p style="text-align: justify;">
+  Administrarea datelor din baza de date (evidenta zborurilor) se
+  va face printr-o aplicatie Java stand-alone, care se conecteaza
+  la baza de date folosind JDBC. Tabelele sunt initial goale, date
+  despre zboruri putand fi adaugate in ele prin aceasta aplicatie
+  de administrare (cu o interfata de tip text).
+</p>
+<p style="text-align: justify;">
+  Operatiile de administrare sunt:
+</p>
+<p style="text-align: justify;">
+  <strong>adaugare_Zbor (String source, String dest, int
+  departureDay, int departureHour, int duration, int numberOfSeats,
+  String flightID);</strong>
+</p>
+<p style="text-align: justify;">
+  <strong>anulare_Zbor (String flightID);</strong>
+</p>
+<p style="text-align: justify;">
+  Pentru adaugare Zbor, se adauga un zbor in ziua departureDay a
+  anului (intre 1 si 365), care decoleaza la ora departureHour
+  (toate zborurile decoleaza la ora fixa, intre 0 si 23), are o
+  durata de duration ore, o capacitate de numberOfSeats locuri si
+  ID-ul flightID. <span lang="DE">Un zbor poate pleca intr-o zi si
+  ajunge la destinatie intr-o alta zi (poate chiar peste mai multe
+  zile).</span> Se garanteaza ca toate ID-urile zborurilor vor fi
+  unice.
+</p>
+<p style="text-align: justify;">
+  anulare Zbor va sterge informatia referitoare la zborul
+  identificat prin flightID (zborul fiind anulat).
+</p>
+<p style="text-align: justify;">
+  Conform politicii standard a companiilor aeriene, se vor putea
+  rezerva maxim 110% din locurile disponibile pentru un zbor
+  (aceasta politica se numeste overbooking si se bazeaza pe faptul
+  ca nu toti cei care rezerva un bilet vor si cumpara biletul
+  respectiv). Asadar, atunci cand un client doreste sa rezerve
+  bilet pentru o serie de zboruri, va trebui ca numarul de locuri
+  rezervate pentru fiecare zbor sa nu fi atins valoarea maxima. De
+  asemenea, este obligatoriu ca operatia de rezervare pentru mai
+  multe zboruri sa se execute atomic (adica ori se rezerva un bilet
+  pentru toate zborurile dorite, ori pentru nici unul). Daca
+  rezervarea biletului reuseste, se intoarce clientului un
+  reservationID (unic).
+</p>
+<p style="text-align: justify;">
+  La un moment dat, ulterior rezervarii, unii clienti vor dori sa
+  cumpere biletul. Pentru aceasta vor apela metoda buyTicket a
+  serviciului web, trimitand reservationID-ul, precum si informatii
+  despre cardul de credit (reprezentand modalitatea standard de
+  plata).
+</p>
+<p style="font-weight: bold; text-align: justify">
+  Cerinte de implementare
+</p>
+<p style="text-align: justify;">
+  Pentru accesarea bazei de date de catre serviciul Web, se cere
+  OBLIGATORIU folosirea mecanismului JDBC DataSource, configurat la
+  nivelul serverului de aplicatii (Tomcat). Obiectul de tip
+  DataSource va fi obtinut in cadrul aplicatiei folosind mecanismul
+  de lookup JNDI.
+</p>
+<p style="text-align: justify;">
+  Pentru accesarea bazei de date de catre aplicatia de
+  administrare, se va folosi mecanismul JDBC bazat pe
+  DriverManager.
+</p>
+<p style="text-align: justify;">
+  Tema <strong>trebuie</strong> sa cuprinda:
+</p>
+<ol>
+  <li>Scripturi de creare a tabelelor necesare in baza de date, cu
+  adaugarea unor date de test in baza de date.
+  </li>
+  <li>Implementarea serviciului web si a tuturor claselor necesare.
+  </li>
+  <li>Implementarea aplicatiei de administrare.
+  </li>
+  <li>Fisiere de configurare necesare Tomcat pentru a putea rula
+  aplicatia.
+  </li>
+  <li>Compilarea/rularea trebuie sa se realizeze cu ANT. Descrieti
+  detaliat in README toti pasii necesari rularii diferitelor
+  componente ale aplicatiei!
+  </li>
+</ol></div></div><div id="dates" class="box generalbox boxaligncenter"><table><tr><td class="c0">Disponibil din:</td>    <td class="c1">luni, 17 decembrie 2012, 7:05 </td></tr><tr><td class="c0">Termen predare:</td>    <td class="c1">luni, 14 ianuarie 2013, 11:55 </td></tr></table></div><div class="box uploadbox"><div class="singlebutton"><form method="get" action="http://cs.curs.pub.ro/2012/mod/assignment/type/uploadsingle/upload.php"><div><input type="submit" value="Upload a file" /><input type="hidden" name="contextid" value="20525" /><input type="hidden" name="userid" value="1834" /></div></form></div></div>                        </div>
+                    </div>
+                </div>
+
+                                <div id="region-pre" class="block-region">
+                    <div class="region-content">
+                        <a href="#sb-1" class="skip-block">Omite Navigation</a><div id="inst4" class="block_navigation  block"><div class="header"><div class="title"><div class="block_action"></div><h2>Navigation</h2></div></div><div class="content"><ul class="block_tree list"><li class="type_unknown depth_1 contains_branch" aria-expanded="true"><p class="tree_item branch navigation_node"><a title="Pagina mea" href="http://cs.curs.pub.ro/2012/my/">Pagina mea</a></p><ul><li class="type_setting depth_2 item_with_icon"><p class="tree_item leaf hasicon"><a title="Pagina principală" href="http://cs.curs.pub.ro/2012/?redirect=0"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Pagina principală</a></p></li>
+<li class="type_course depth_2 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch"><span title="Cursuri Facultatea de Automatica si Calculatoare" tabindex="0">Pagini site</span></p><ul><li class="type_custom depth_3 item_with_icon"><p class="tree_item leaf hasicon"><a title="Site blogs" href="http://cs.curs.pub.ro/2012/blog/index.php?courseid=0"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Site blogs</a></p></li>
+<li class="type_custom depth_3 item_with_icon"><p class="tree_item leaf hasicon"><a title="Etichete" href="http://cs.curs.pub.ro/2012/tag/search.php"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Etichete</a></p></li>
+<li class="type_custom depth_3 item_with_icon"><p class="tree_item leaf hasicon"><a title="Calendar" href="http://cs.curs.pub.ro/2012/calendar/view.php?view=month"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Calendar</a></p></li>
+<li class="type_activity depth_3 item_with_icon"><p class="tree_item leaf hasicon"><a title="Forum" href="http://cs.curs.pub.ro/2012/mod/forum/view.php?id=1421"><img alt="Forum" class="smallicon navicon" title="Forum" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/forum/1351442742/icon" />Ştiri site</a></p></li></ul></li>
+<li class="type_user depth_2 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch"><span tabindex="0">Profilul meu</span></p><ul><li class="type_custom depth_3 item_with_icon"><p class="tree_item leaf hasicon"><a title="Vezi profilul" href="http://cs.curs.pub.ro/2012/user/profile.php?id=1834"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Vezi profilul</a></p></li>
+<li class="type_custom depth_3 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch"><span tabindex="0">Intervenţii forum</span></p><ul><li class="type_custom depth_4 item_with_icon"><p class="tree_item leaf hasicon"><a title="Intervenţii" href="http://cs.curs.pub.ro/2012/mod/forum/user.php?id=1834"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Intervenţii</a></p></li>
+<li class="type_custom depth_4 item_with_icon"><p class="tree_item leaf hasicon"><a title="Discuţii" href="http://cs.curs.pub.ro/2012/mod/forum/user.php?id=1834&amp;mode=discussions"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Discuţii</a></p></li></ul></li>
+<li class="type_unknown depth_3 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch"><span tabindex="0">Bloguri</span></p><ul><li class="type_custom depth_4 item_with_icon"><p class="tree_item leaf hasicon"><a title="View all of my entries" href="http://cs.curs.pub.ro/2012/blog/index.php?userid=1834"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />View all of my entries</a></p></li>
+<li class="type_custom depth_4 item_with_icon"><p class="tree_item leaf hasicon"><a title="Adaugă intrare nouă" href="http://cs.curs.pub.ro/2012/blog/edit.php?action=add"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Adaugă intrare nouă</a></p></li>
+<li class="type_setting depth_4 item_with_icon"><p class="tree_item leaf hasicon"><a title="Blog RSS feed" href="http://cs.curs.pub.ro/2012/rss/file.php/1/59dffc2ee3c187370e868f12db639626/blog/user/1834/rss.xml"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/rss" />Blog RSS feed</a></p></li></ul></li>
+<li class="type_setting depth_3 item_with_icon"><p class="tree_item leaf hasicon"><a title="Mesaje" href="http://cs.curs.pub.ro/2012/message/index.php"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Mesaje</a></p></li>
+<li class="type_setting depth_3 item_with_icon"><p class="tree_item leaf hasicon"><a title="Fişierele mele personale" href="http://cs.curs.pub.ro/2012/user/files.php"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Fişierele mele personale</a></p></li></ul></li>
+<li class="type_system depth_2 contains_branch" aria-expanded="true"><p class="tree_item branch canexpand"><span tabindex="0">Cursurile mele</span></p><ul><li class="type_course depth_3 contains_branch" aria-expanded="true"><p class="tree_item branch canexpand"><a title="Sisteme de programe pentru reţele de calculatoare (Seria: C3)" href="http://cs.curs.pub.ro/2012/course/view.php?id=141">L-4-SPRC-C3</a></p><ul><li class="type_unknown depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch"><a title="Participanţi" href="http://cs.curs.pub.ro/2012/user/index.php?id=141">Participanţi</a></p><ul><li class="type_custom depth_5 item_with_icon"><p class="tree_item leaf hasicon"><a title="Course blogs" href="http://cs.curs.pub.ro/2012/blog/index.php?courseid=141"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Course blogs</a></p></li>
+<li class="type_user depth_5 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch"><a title="Constantin-Claudiu GHIOC" href="http://cs.curs.pub.ro/2012/user/view.php?id=1834&amp;course=141">Constantin-Claudiu GHIOC</a></p><ul><li class="type_custom depth_6 item_with_icon"><p class="tree_item leaf hasicon"><a title="Vezi profilul" href="http://cs.curs.pub.ro/2012/user/view.php?id=1834&amp;course=141"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Vezi profilul</a></p></li>
+<li class="type_custom depth_6 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch"><span tabindex="0">Intervenţii forum</span></p><ul><li class="type_custom depth_7 item_with_icon"><p class="tree_item leaf hasicon"><a title="Intervenţii" href="http://cs.curs.pub.ro/2012/mod/forum/user.php?id=1834&amp;course=141"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Intervenţii</a></p></li>
+<li class="type_custom depth_7 item_with_icon"><p class="tree_item leaf hasicon"><a title="Discuţii" href="http://cs.curs.pub.ro/2012/mod/forum/user.php?id=1834&amp;course=141&amp;mode=discussions"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Discuţii</a></p></li></ul></li>
+<li class="type_unknown depth_6 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch"><span tabindex="0">Bloguri</span></p><ul><li class="type_custom depth_7 item_with_icon"><p class="tree_item leaf hasicon"><a title="View all of my entries" href="http://cs.curs.pub.ro/2012/blog/index.php?userid=1834"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />View all of my entries</a></p></li>
+<li class="type_custom depth_7 item_with_icon"><p class="tree_item leaf hasicon"><a title="Adaugă intrare nouă" href="http://cs.curs.pub.ro/2012/blog/edit.php?action=add"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Adaugă intrare nouă</a></p></li>
+<li class="type_setting depth_7 item_with_icon"><p class="tree_item leaf hasicon"><a title="Blog RSS feed" href="http://cs.curs.pub.ro/2012/rss/file.php/1/59dffc2ee3c187370e868f12db639626/blog/user/1834/rss.xml"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/rss" />Blog RSS feed</a></p></li></ul></li>
+<li class="type_setting depth_6 item_with_icon"><p class="tree_item leaf hasicon"><a title="Mesaje" href="http://cs.curs.pub.ro/2012/message/index.php"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Mesaje</a></p></li>
+<li class="type_setting depth_6 item_with_icon"><p class="tree_item leaf hasicon"><a title="Fişierele mele personale" href="http://cs.curs.pub.ro/2012/user/files.php"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Fişierele mele personale</a></p></li></ul></li></ul></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_1"><span tabindex="0">General</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_2"><span tabindex="0"> 1 octombrie -  7 octombrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_3"><span tabindex="0"> 8 octombrie -  14 octombrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_4"><span tabindex="0"> 15 octombrie -  21 octombrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_5"><span tabindex="0"> 22 octombrie -  28 octombrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_6"><span tabindex="0"> 29 octombrie -  4 noiembrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_7"><span tabindex="0"> 5 noiembrie -  11 noiembrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_8"><span tabindex="0"> 12 noiembrie -  18 noiembrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_9"><span tabindex="0"> 19 noiembrie -  25 noiembrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_10"><span tabindex="0"> 26 noiembrie -  2 decembrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_11"><span tabindex="0"> 3 decembrie -  9 decembrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_12"><span tabindex="0"> 10 decembrie -  16 decembrie</span></p></li>
+<li class="type_structure depth_4 contains_branch" aria-expanded="true"><p class="tree_item branch"><span tabindex="0"> 17 decembrie -  23 decembrie</span></p><ul><li class="type_activity depth_5 item_with_icon"><p class="tree_item leaf hasicon"><a title="Page" href="http://cs.curs.pub.ro/2012/mod/page/view.php?id=2746"><img alt="Page" class="smallicon navicon" title="Page" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/page/1351442742/icon" />Laborator 6. Servicii Web</a></p></li>
+<li class="type_activity depth_5 item_with_icon current_branch"><p class="tree_item leaf hasicon active_tree_node"><a title="Temă (2.2)" href="http://cs.curs.pub.ro/2012/mod/assignment/view.php?id=3147"><img alt="Temă (2.2)" class="smallicon navicon" title="Temă (2.2)" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/assignment/1351442742/icon" />... Serviciu web pentru rezervarea biletelor de avion</a></p></li>
+<li class="type_activity depth_5 item_with_icon"><p class="tree_item leaf hasicon"><a title="Forum" href="http://cs.curs.pub.ro/2012/mod/forum/view.php?id=3148"><img alt="Forum" class="smallicon navicon" title="Forum" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/forum/1351442742/icon" />Tema 4 - Forum</a></p></li></ul></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_13"><span tabindex="0"> 24 decembrie -  30 decembrie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_14"><span tabindex="0"> 31 decembrie -  6 ianuarie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_15"><span tabindex="0"> 7 ianuarie -  13 ianuarie</span></p></li>
+<li class="type_structure depth_4 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_16"><span tabindex="0"> 14 ianuarie -  20 ianuarie</span></p></li></ul></li>
+<li class="type_course depth_3 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_17"><a title="Sisteme incorporate (Seria: C1)" href="http://cs.curs.pub.ro/2012/course/view.php?id=136">L-4-SI-C1</a></p></li>
+<li class="type_course depth_3 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_18"><a title="Proiectarea reţelelor (Seria: C1)" href="http://cs.curs.pub.ro/2012/course/view.php?id=131">L-4-PRe-C1</a></p></li>
+<li class="type_course depth_3 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_19"><a title="Structuri multiprocesor (Seria: C1)" href="http://cs.curs.pub.ro/2012/course/view.php?id=130">L-4-SMu-C1</a></p></li>
+<li class="type_course depth_3 collapsed contains_branch" aria-expanded="false"><p class="tree_item branch" id="expandable_branch_20"><a title="Arhitecturi şi prelucrări paralele (C1)" href="http://cs.curs.pub.ro/2012/course/view.php?id=129">L-4-APPa-C1</a></p></li></ul></li></ul></li></ul></div></div><span id="sb-1" class="skip-block-to"></span><a href="#sb-2" class="skip-block">Omite Settings</a><div id="inst5" class="block_settings  block"><div class="header"><div class="title"><div class="block_action"></div><h2>Settings</h2></div></div><div class="content"><div id="settingsnav" class="box block_tree_box"><ul class="block_tree list"><li class="type_course collapsed contains_branch" aria-expanded="false"><p class="tree_item branch root_node"><span tabindex="0">Administrare curs</span></p><ul><li class="type_setting collapsed item_with_icon"><p class="tree_item leaf"><a title="Note" href="http://cs.curs.pub.ro/2012/grade/report/index.php?id=141"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/grades" />Note</a></p></li></ul></li>
+<li class="type_unknown collapsed contains_branch" aria-expanded="false"><hr /><p class="tree_item branch root_node" id="usersettings"><span tabindex="0">Setări profilul meu</span></p><ul><li class="type_setting collapsed item_with_icon"><p class="tree_item leaf"><a title="Editează profil" href="http://cs.curs.pub.ro/2012/user/edit.php?id=1834&amp;course=141"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Editează profil</a></p></li>
+<li class="type_setting collapsed item_with_icon"><p class="tree_item leaf"><a title="Schimbă parola" href="http://cs.curs.pub.ro/2012/login/change_password.php?id=141"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Schimbă parola</a></p></li>
+<li class="type_setting collapsed item_with_icon"><p class="tree_item leaf"><a title="Security keys" href="http://cs.curs.pub.ro/2012/user/managetoken.php?sesskey=SX4BYwsMdu"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Security keys</a></p></li>
+<li class="type_setting collapsed item_with_icon"><p class="tree_item leaf"><a title="Mesagerie" href="http://cs.curs.pub.ro/2012/message/edit.php?id=1834&amp;course=141"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Mesagerie</a></p></li>
+<li class="type_unknown collapsed contains_branch" aria-expanded="false"><p class="tree_item branch"><span tabindex="0">Bloguri</span></p><ul><li class="type_setting collapsed item_with_icon"><p class="tree_item leaf"><a title="Preferences" href="http://cs.curs.pub.ro/2012/blog/preferences.php"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Preferences</a></p></li>
+<li class="type_setting collapsed item_with_icon"><p class="tree_item leaf"><a title="External blogs" href="http://cs.curs.pub.ro/2012/blog/external_blogs.php"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />External blogs</a></p></li>
+<li class="type_setting collapsed item_with_icon"><p class="tree_item leaf"><a title="Register an external blog" href="http://cs.curs.pub.ro/2012/blog/external_blog_edit.php"><img alt="" class="smallicon navicon" title="" src="http://cs.curs.pub.ro/2012/theme/image.php/sky_high/core/1351442742/i/navigationitem" />Register an external blog</a></p></li></ul></li></ul></li></ul></div></div></div><span id="sb-2" class="skip-block-to"></span>                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END OF CONTENT -->
+
+</div>
+
+<!-- END OF WRAPPER -->
+
+<!-- START OF FOOTER -->
+        <div id="page-footer">
+
+<!-- START OF FOOTER-INNER -->
+
+        <div id="page-footer-inner">
+            <div class="footnote"><p>Acest site este hostat pe platfoma hardware achitionata din proiectul nr. 154/323 cod SMIS – 4428, "Platforma de e-learning si curricula e-content pentru invatamantul superior tehnic". Pentru mai multe detalii vezi <a href="https://cluster.grid.pub.ro/index.php/cursuri-upb-despre-proiect" _mce_href="https://cluster.grid.pub.ro/index.php/cursuri-upb-despre-proiect">http://www.curs.pub.ro</a>.</p></div>
+            <div class="logininfo">Sunteţi autentificat ca <a href="http://cs.curs.pub.ro/2012/user/profile.php?id=1834">Constantin-Claudiu GHIOC</a>  (<a href="http://cs.curs.pub.ro/2012/login/logout.php?sesskey=SX4BYwsMdu">Ieşire</a>)</div>        </div>
+
+<!-- END OF FOOTER-INNER -->
+
+        <p class="helplink"></p>
+        <div class="homelink"><a href="http://cs.curs.pub.ro/2012/course/view.php?id=141">L-4-SPRC-C3</a></div>        
+
+</div>
+
+<!-- END OF FOOTER -->
+
+</div>
+
+<!-- END OF PAGE -->
+<script type="text/javascript" src="http://cs.curs.pub.ro/2012/lib/javascript.php/1351442742/mod/assignment/assignment.js"></script>
+<script type="text/javascript" src="http://cs.curs.pub.ro/2012/theme/javascript.php/sky_high/1351442742/footer"></script>
+<script type="text/javascript">
+//<![CDATA[
+M.str = {"moodle":{"lastmodified":"Ultima modificare","name":"Nume","error":"Eroare","info":"Informa\u0163ii","viewallcourses":"Vezi toate cursurile","cancel":"Anuleaz\u0103","yes":"Da"},"repository":{"type":"Tip","size":"Dimensiune","invalidjson":"\u0218ir de caractere JSON invalid","nofilesattached":"Nu exist\u0103 fi\u0219iere ata\u0219ate","filepicker":"Selector de fi\u0219iere","logout":"Ie\u0219ire","nofilesavailable":"Nu sunt fi\u0219iere disponibile","norepositoriesavailable":"Sorry, none of your current repositories can return files in the required format.","fileexistsdialogheader":"Fi\u0219ierul exist\u0103","fileexistsdialog_editor":"A file with that name has already been attached to the text you are editing.","fileexistsdialog_filemanager":"A file with that name has already been attached","renameto":"Redenumi\u021bi ca \"{$a}\"","referencesexist":"There are {$a} alias\/shortcut files that use this file as their source"},"block":{"addtodock":"Mut\u0103 asta pe doc","undockitem":"Deandocheaz\u0103 acest obiect","undockall":"Deandocheaz\u0103 tot"},"langconfig":{"thisdirectionvertical":"btt"},"admin":{"confirmation":"Confirmare"}};
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+var navtreeexpansions4 = [{"id":"expandable_branch_1","key":"2381","type":30},{"id":"expandable_branch_2","key":"2382","type":30},{"id":"expandable_branch_3","key":"2383","type":30},{"id":"expandable_branch_4","key":"2384","type":30},{"id":"expandable_branch_5","key":"2385","type":30},{"id":"expandable_branch_6","key":"2386","type":30},{"id":"expandable_branch_7","key":"2387","type":30},{"id":"expandable_branch_8","key":"2388","type":30},{"id":"expandable_branch_9","key":"2389","type":30},{"id":"expandable_branch_10","key":"2390","type":30},{"id":"expandable_branch_11","key":"2391","type":30},{"id":"expandable_branch_12","key":"2392","type":30},{"id":"expandable_branch_13","key":"2394","type":30},{"id":"expandable_branch_14","key":"2395","type":30},{"id":"expandable_branch_15","key":"2396","type":30},{"id":"expandable_branch_16","key":"2397","type":30},{"id":"expandable_branch_17","key":"136","type":20},{"id":"expandable_branch_18","key":"131","type":20},{"id":"expandable_branch_19","key":"130","type":20},{"id":"expandable_branch_20","key":"129","type":20}];
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+YUI(M.yui.loader).use('node', function(Y) {
+M.util.load_flowplayer();
+setTimeout("fix_column_widths()", 20);
+M.yui.galleryversion="2010.04.08-12-35";Y.use("moodle-filter_glossary-autolinker",function() {M.filter_glossary.init_filter_autolinking({"courseid":0});
+});
+M.yui.galleryversion="2010.04.08-12-35";Y.use("core_dock","moodle-block_navigation-navigation",function() {M.block_navigation.init_add_tree({"id":"4","instance":"4","candock":true,"courselimit":"20","expansionlimit":0});
+});
+M.yui.galleryversion="2010.04.08-12-35";Y.use("core_dock","moodle-block_navigation-navigation",function() {M.block_navigation.init_add_tree({"id":"5","instance":"5","candock":true});
+});
+M.yui.galleryversion="2010.04.08-12-35";Y.use("node-menunav",function() {(function(){M.core_custom_menu.init(Y, "custom_menu_1");
+})();
+});
+M.util.init_block_hider(Y, {"id":"inst4","title":"Navigation","preference":"block4hidden","tooltipVisible":"Ascunde blocul Navigation","tooltipHidden":"Arat\u0103 blocul Navigation"});
+M.util.init_block_hider(Y, {"id":"inst5","title":"Settings","preference":"block5hidden","tooltipVisible":"Ascunde blocul Settings","tooltipHidden":"Arat\u0103 blocul Settings"});
+
+});
+//]]>
+</script>
+</body>
+</html>
