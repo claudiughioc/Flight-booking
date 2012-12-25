@@ -1,0 +1,47 @@
+<project name="4temaSPRC" default="compile" basedir=".">
+
+    <property name="build.dir"    value="build"/>
+    <property name="src.dir"    value="src"/>
+    <property name="axis.dir"    value="/home/claudiu/Desktop/sem1/sprc/5lab.web/axis-1_4/"/>
+    <property name="catalina.dir"    value="/home/claudiu/Desktop/sem1/sprc/5lab.web/apache-tomcat-6.0.36/"/>
+
+
+    <path id="master-classpath">
+
+        <!-- Include all JAR files that will be included in /WEB-INF/lib -->
+        <!--
+          <pathelement location="${foo.jar}"/>
+          -->
+
+        <!-- Include all elements that Tomcat exposes to applications -->
+        <pathelement location="${catalina.dir}/common/classes"/>
+        <pathelement location="${catalina.dir}/classes"/>
+        <fileset dir="${catalina.dir}/lib">
+            <include name="*.jar"/>
+        </fileset>
+
+        <!-- Include all elements from Axis -->
+        <pathelement location="${axis.dir}/common/classes"/>
+        <pathelement location="${axis.dir}/classes"/>
+        <fileset dir="${axis.dir}/lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+
+    <target name="clean"
+            description="Delete old build and dist directories">
+        <delete dir="${build.dir}"/>
+    </target>
+
+
+    <target name="build" description="">
+        <mkdir dir="${build.dir}"/>
+        <javac destdir="${build.dir}"  debug="true"
+                deprecation="false" failonerror="true">
+            <src path="${src.dir}"/>
+            <classpath refid="master-classpath"/>
+        </javac>
+    </target>
+
+</project>
