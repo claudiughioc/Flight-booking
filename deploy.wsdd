@@ -1,0 +1,6 @@
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<service name="AirService" provider="java:RPC">
+		<parameter name="className" value="airService.web.AirService" />
+		<parameter name="allowedMethods" value="*"/>
+	</service>
+</deployment>

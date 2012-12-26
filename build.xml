@@ -4,15 +4,10 @@
     <property name="src.dir"    value="src"/>
     <property name="axis.dir"    value="/home/claudiu/Desktop/sem1/sprc/5lab.web/axis-1_4/"/>
     <property name="catalina.dir"    value="/home/claudiu/Desktop/sem1/sprc/5lab.web/apache-tomcat-6.0.36/"/>
+    <property name="deploy.dir"    value="${catalina.dir}/webapps/axis/WEB-INF/classes/"/>
 
 
     <path id="master-classpath">
-
-        <!-- Include all JAR files that will be included in /WEB-INF/lib -->
-        <!--
-          <pathelement location="${foo.jar}"/>
-          -->
-
         <!-- Include all elements that Tomcat exposes to applications -->
         <pathelement location="${catalina.dir}/common/classes"/>
         <pathelement location="${catalina.dir}/classes"/>
@@ -35,7 +30,8 @@
     </target>
 
 
-    <target name="build" description="">
+    <target name="build" description="Compile the project's source files"
+            depends="clean">
         <mkdir dir="${build.dir}"/>
         <javac destdir="${build.dir}"  debug="true"
                 deprecation="false" failonerror="true">
@@ -43,5 +39,26 @@
             <classpath refid="master-classpath"/>
         </javac>
     </target>
+
+
+    <target name="deploy" description="Deploy the project to Tomcat"
+            depends="build">
+        <mkdir     dir="${deploy.dir}"/>
+        <copy    todir="${deploy.dir}">
+            <fileset dir="${build.dir}"/>
+        </copy>
+        <java
+                classname="org.apache.axis.client.AdminClient"
+                dir="."
+                fork="true"
+                failonerror="true">
+            <classpath>
+                <pathelement path="${build.dir}"/>
+                <path refid="master-classpath"/>
+            </classpath>
+            <arg line="-lhttp://localhost:8080/axis/services/AdminService deploy.wsdd"/>
+        </java>
+
+        </target>
 
 </project>
