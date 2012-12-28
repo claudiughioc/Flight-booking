@@ -10,7 +10,8 @@ public class Flight implements Comparable<Flight> {
 	public static final int STATE_CANCELED	= 1;
 	public static final int MAXIMUM_COST		= 600000;
 
-	public int id, hour, day, duration, state, totalSeats, bookedSeats, cost = MAXIMUM_COST;
+	public int id, hour, day, duration, state, totalSeats, bookedSeats,
+		cost = MAXIMUM_COST, noFlights = 0;
 	public String flightIdOfficial, source, destination;
 	public Flight previous = null;
 
@@ -38,7 +39,7 @@ public class Flight implements Comparable<Flight> {
 			return "Flight " + flightIdOfficial +" (" +
 					source + " - " + destination + " day " + day + " hour " +
 					hour + " duration " + duration + " state " + state + " booked " +
-					bookedSeats + " seats out of " + totalSeats + ") ";
+					bookedSeats + " seats out of " + totalSeats + "[noFlights " + noFlights + "]) ";
 		return "Dummy root flight";
 	}
 

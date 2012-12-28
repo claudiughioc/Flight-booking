@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
@@ -29,16 +30,17 @@ public class AirService implements WebAirService {
 			int departureDay) {
 		System.out.println("Getting optimal route from " + source + " to " + dest +
 				" maxFlights " + maxFlights + " day " + departureDay);
-		Flight arrival = null;
+		int noFlights = 0;
 
 		// Connect to the database
 		createDBConnection();
 
 		// Initiate all available flights
 		PriorityQueue<Flight> availableFlights = initAllFlights(departureDay);
-		Flight rootDummyFlight = new Flight(source, source);
+		ArrayList<Flight> auxList = new ArrayList<Flight>();
+		// Create a root and an end dummy Fligths 
+		Flight rootDummyFlight = initRootInfo(source, availableFlights);
 		Flight endDummyFlight = new Flight(dest, dest);
-		rootDummyFlight.cost = 0;
 		endDummyFlight.day = 366;
 		endDummyFlight.hour = 25;
 		availableFlights.add(rootDummyFlight);
@@ -47,6 +49,7 @@ public class AirService implements WebAirService {
 		// Apply the Dijkstra algorithm
 		while (!availableFlights.isEmpty()) {
 			Flight current = availableFlights.remove();
+			auxList.add(current);
 			System.out.println("Removed from queue " + current);
 			if (current.cost == Flight.MAXIMUM_COST)
 				break;
@@ -69,10 +72,10 @@ public class AirService implements WebAirService {
 					else
 						alt = current.cost;
 
-				if (alt < connection.cost) {
+				if (alt < connection.cost && (current.noFlights <= maxFlights)) {
 					connection.cost = alt;
 					connection.previous = current;
-					arrival = connection;
+					connection.noFlights = current.noFlights + 1;
 
 					// Re-add the changed objects in a copied queue
 					copy.remove(connection);
@@ -84,19 +87,23 @@ public class AirService implements WebAirService {
 			// Force the reordering of the queue
 			availableFlights = new PriorityQueue<Flight>(copy);
 		}
-		if (arrival == null)
+		
+		for (Flight flight : auxList)
+			if (flight.source.equals(flight.destination) && flight.destination.equals(dest))
+				endDummyFlight = flight;
+		if (endDummyFlight.previous == null)
 			return new String[]{"No route from " + source + " to " + dest};
 
-		System.out.println("Arrival with flight " + arrival);
+		System.out.println("Arrival with flight " + endDummyFlight);
 
 		// Build the correctly ordered route
 		LinkedList<Flight> finalRoute = new LinkedList<Flight>();
 		while (true) {
-			Flight previous = arrival.previous;
+			Flight previous = endDummyFlight.previous;
 			if (previous.source.equals(source) && previous.source.equals(previous.destination))
 				break;
 			finalRoute.addFirst(previous);
-			arrival = previous;
+			endDummyFlight = previous;
 		}
 
 		// Built the formatted String array
@@ -116,6 +123,39 @@ public class AirService implements WebAirService {
 	 * Makes a reservation for a route between two locations
 	 */
 	public String bookTicket(String[] flightIds) {
+		System.out.println("Booking ticket");
+
+		// Connect to the database
+		createDBConnection();
+
+		String sql = "";
+		boolean ok = true;
+		synchronized (AirService.class) {
+			for (int i = 0; i < flightIds.length; i++) {
+				int total = 0, booked = 0;
+				sql = "SELECT total_seats, booked_seats from Flight where " +
+						"flight_id_official = " + flightIds[i];
+				try {
+					Statement statement = connection.createStatement();
+					ResultSet rs = statement.executeQuery(sql);
+					while(rs.next()) {
+						total = rs.getInt(1);
+						booked = rs.getInt(2);
+					}
+					if (booked + 1 > total)
+						ok = false;
+					rs.close();
+					statement.close();
+				} catch (SQLException e) {
+					System.out.println("Error on retrieving flight information: " + e);
+					e.printStackTrace();
+				}
+			}
+			if (ok)
+				System.out.println("The reservation can be made");
+			else
+				System.out.println("There is a full plane");
+		}
 		return "bookTicket";
 	}
 
@@ -151,6 +191,7 @@ public class AirService implements WebAirService {
 		
 		return "buyTicketOut";
 	}
+
 
 	/**
 	 * Attempts to connect to the "airservice" DB
@@ -205,6 +246,13 @@ public class AirService implements WebAirService {
 		return availableFlights;
 	}
 
+
+	/**
+	 * Calculate the cost between two Flights
+	 * @param first
+	 * @param second
+	 * @return - duration in hours
+	 */
 	public int distanceBetweenFlights(Flight first, Flight second) {
 		int distance = 0;
 		if (second.day + 1 >= first.day) {
@@ -214,5 +262,19 @@ public class AirService implements WebAirService {
 			distance = second.hour - first.hour;
 		distance += second.duration;
 		return distance;
+	}
+
+
+	/**
+	 * Initialize information for a dummy flight, the root of the graph
+	 * @param source
+	 * @param availableFlights
+	 * @return the Flight object corresponding to the root
+	 */
+	public Flight initRootInfo(String source, PriorityQueue<Flight> availableFlights) {
+		Flight root = new Flight(source, source);
+		root.cost = 0;
+		root.noFlights = 0;
+		return root;
 	}
 }
