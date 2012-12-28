@@ -62,6 +62,113 @@ if (!mysql_query($sql,$con))
     die("Could not create table Ticket: " . mysql_error());
 echo "Created table Ticket\n";
 
+$sql = "
+    insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1234', 'Bucuresti', 'Budapesta', 10, 10, 1, 0, 100, 10);";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1235', 'Bucuresti', 'Viena', 10, 11, 1, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1236', 'Bucuresti', 'Roma', 10, 11, 1, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1237', 'Budapesta', 'Viena', 10, 14, 1, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1238', 'Roma', 'Lisabona', 10, 20, 2, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1239', 'Lisabona', 'Londra', 11, 2, 2, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1240', 'Viena', 'Madrid', 10, 13, 1, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1242', 'Madrid', 'Londra', 11, 06, 3, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1241', 'Madrid', 'Lisabona', 10, 15, 1, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1243', 'Budapesta', 'Berlin', 10, 17, 1, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1244', 'Viena', 'Berlin', 11, 06, 1, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+$sql = "
+insert into Flight(flight_id_official, source, destination, day, hour, duration, state, total_seats, booked_seats)
+    value
+    ('1245', 'Berlin', 'Londra', 11, 04, 2, 0, 100, 10);
+";
+if (!mysql_query($sql,$con))
+    die("Could not insert test data: " . mysql_error());
+echo "Inserted test data\n";
+
+
+
 // Close the connection to the DB
 mysql_close($con);
 echo "Connection closed. Database created successfuly\n";
