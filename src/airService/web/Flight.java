@@ -8,10 +8,16 @@ package airService.web;
 public class Flight implements Comparable<Flight> {
 	public static final int STATE_AVAILABLE	= 0;
 	public static final int STATE_CANCELED	= 1;
+	public static final int MAXIMUM_COST		= 600000;
 
-	public int id, hour, day, duration, state, totalSeats, bookedSeats, cost = 0;
+	public int id, hour, day, duration, state, totalSeats, bookedSeats, cost = MAXIMUM_COST;
 	public String flightIdOfficial, source, destination;
 	public Flight previous = null;
+
+	public Flight(String source, String destination) {
+		this.destination = destination;
+		this.source = source;
+	}
 
 	public Flight(int id, int hour, int day, int duration, int state, int totalSeats,
 			int bookedSeats, String flightIdOfficial, String source, String destination) {
@@ -23,14 +29,17 @@ public class Flight implements Comparable<Flight> {
 		this.bookedSeats = bookedSeats;
 		this.flightIdOfficial = flightIdOfficial;
 		this.source = source;
+		this.duration = duration;
 		this.destination = destination;
 	}
 
 	public String toString() {
-		return "Flight " + flightIdOfficial + " id " + id + " from " +
-				source + " to " + destination + " day " + day + " hour " +
-				hour + " duration " + duration + " state " + state + " booked " +
-				bookedSeats + " seats from total " + totalSeats;
+		if (!source.equals(destination))
+			return "Flight " + flightIdOfficial +" (" +
+					source + " - " + destination + " day " + day + " hour " +
+					hour + " duration " + duration + " state " + state + " booked " +
+					bookedSeats + " seats out of " + totalSeats + ") ";
+		return "Dummy root flight";
 	}
 
 	@Override

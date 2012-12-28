@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 import javax.naming.Context;
@@ -29,19 +29,86 @@ public class AirService implements WebAirService {
 			int departureDay) {
 		System.out.println("Getting optimal route from " + source + " to " + dest +
 				" maxFlights " + maxFlights + " day " + departureDay);
+		Flight arrival = null;
 
 		// Connect to the database
 		createDBConnection();
 
 		// Initiate all available flights
-		ArrayList<Flight> availableFlights = initAllFlights(departureDay);
-		PriorityQueue<Flight> pq = new PriorityQueue<Flight>();
-		ArrayList<Flight> sourceFlights = new ArrayList<Flight>();
-		for (Flight fromSource : availableFlights)
-			if (fromSource.equals(source) && (fromSource.day >= departureDay))
-				sourceFlights.add(fromSource);
+		PriorityQueue<Flight> availableFlights = initAllFlights(departureDay);
+		Flight rootDummyFlight = new Flight(source, source);
+		Flight endDummyFlight = new Flight(dest, dest);
+		rootDummyFlight.cost = 0;
+		endDummyFlight.day = 366;
+		endDummyFlight.hour = 25;
+		availableFlights.add(rootDummyFlight);
+		availableFlights.add(endDummyFlight);
 		
-		return new String [] {"getOptimalRoute"};
+		// Apply the Dijkstra algorithm
+		while (!availableFlights.isEmpty()) {
+			Flight current = availableFlights.remove();
+			System.out.println("Removed from queue " + current);
+			if (current.cost == Flight.MAXIMUM_COST)
+				break;
+
+			PriorityQueue<Flight> copy = new PriorityQueue<Flight>(availableFlights);
+			for (Flight connection : availableFlights) {
+				// Select only the connected flights later than the current
+				if (!connection.source.equals(current.destination) ||
+						(connection.day < current.day) || (connection.day == current.day && connection.hour < current.hour))
+					continue;
+
+				// Add the current cost for all the flights except the root
+				int alt;
+				if (!current.source.equals(current.destination))
+					alt = current.cost - current.duration + distanceBetweenFlights(current, connection);
+				else
+					// Add cost for dummy flights
+					if (current.source.equals(source))
+						alt = connection.duration;
+					else
+						alt = current.cost;
+
+				if (alt < connection.cost) {
+					connection.cost = alt;
+					connection.previous = current;
+					arrival = connection;
+
+					// Re-add the changed objects in a copied queue
+					copy.remove(connection);
+					copy.add(connection);
+					System.out.println("Connection: " + current + " and " + connection + " total cost " + connection.cost);
+				}
+			}
+
+			// Force the reordering of the queue
+			availableFlights = new PriorityQueue<Flight>(copy);
+		}
+		if (arrival == null)
+			return new String[]{"No route from " + source + " to " + dest};
+
+		System.out.println("Arrival with flight " + arrival);
+
+		// Build the correctly ordered route
+		LinkedList<Flight> finalRoute = new LinkedList<Flight>();
+		while (true) {
+			Flight previous = arrival.previous;
+			if (previous.source.equals(source) && previous.source.equals(previous.destination))
+				break;
+			finalRoute.addFirst(previous);
+			arrival = previous;
+		}
+
+		// Built the formatted String array
+		String [] response = new String[finalRoute.size() + 1];
+		response[0] = "";
+		int i = 1;
+		for (Flight flight : finalRoute) {
+			response[0] += flight + "\n";
+			response[i] = flight.flightIdOfficial;
+			i++;
+		}
+		return response;
 	}
 
 
@@ -110,13 +177,13 @@ public class AirService implements WebAirService {
 	/**
 	 * Initiates the list with all the flights
 	 */
-	public ArrayList<Flight> initAllFlights(int departureDay) {
-		ArrayList<Flight> availableFlights = new ArrayList<Flight>();
+	public PriorityQueue<Flight> initAllFlights(int departureDay) {
+		PriorityQueue<Flight> availableFlights = new PriorityQueue<Flight>();
 
 		// Get all available flights
 		String sql = "SELECT id, flight_id_official, source, destination, hour, day, " +
 				"duration, state, total_seats, booked_seats from Flight where day >= " +
-				departureDay;
+				departureDay + " and state = " + Flight.STATE_AVAILABLE;
 		
 		try {
 			Statement statement = connection.createStatement();
@@ -136,5 +203,16 @@ public class AirService implements WebAirService {
 			return null;
 		}
 		return availableFlights;
+	}
+
+	public int distanceBetweenFlights(Flight first, Flight second) {
+		int distance = 0;
+		if (second.day + 1 >= first.day) {
+			distance = (second.day - 1 - first.day) * 24;
+			distance += (24 - first.hour) + second.hour;
+		} else
+			distance = second.hour - first.hour;
+		distance += second.duration;
+		return distance;
 	}
 }
