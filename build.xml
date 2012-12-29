@@ -71,4 +71,16 @@
             </classpath>
         </java>
     </target>
+
+    <target name="client" description="Run the client application"
+            depends="build">
+        <java classname="airService.client.Client" fork="true">
+            <classpath>
+                <pathelement path="build/" />
+                <pathelement path="resources/" />
+                <path refid="master-classpath"/>
+            </classpath>
+            <arg value="http://localhost:8080/axis/services/AirService?wsdl"/>
+        </java>
+    </target>
 </project>
