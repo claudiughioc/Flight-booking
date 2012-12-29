@@ -61,4 +61,14 @@
 
         </target>
 
+    <target name="admin" description="Run the admin application"
+            depends="build">
+        <java classname="airService.admin.Admin" fork="true">
+            <classpath>
+                <pathelement path="build/" />
+                <pathelement path="resources/" />
+                <path refid="master-classpath"/>
+            </classpath>
+        </java>
+    </target>
 </project>
