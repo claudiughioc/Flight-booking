@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+
+import airService.web.Flight;
 
 /**
  * The administration application
@@ -45,6 +48,22 @@ public class Admin {
 			return;
 		}
 		
+		String sql = "INSERT INTO Flight " +
+				" (flight_id_official, source, destination, hour, day, duration, " +
+				"state, total_seats, booked_seats ) value " +
+				"(\"" + flightId + "\", \"" + source + "\", \"" + dest +
+				"\", " + departureHour + ", " + departureDay+ ", " + duration + ", "
+				+ Flight.STATE_AVAILABLE + ", " + numberOfSeats + ", 0)";
+		try {
+			Statement statement = Admin.connection.createStatement();
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println("Could not insert flight");
+			e.printStackTrace();
+			return;
+		}
+		System.out.println("Flight added successfuly");
 	}
 
 	/**
@@ -52,12 +71,25 @@ public class Admin {
 	 * @param st
 	 */
 	public static void cancelFlight(StringTokenizer st) {
-		String flightId;
+		String flightId = "";
 		if (st.hasMoreTokens())
 			flightId = st.nextToken();
 		else {
 			System.out.println("Incorrect command arguments! ");
 			System.out.println("Try like this: " + CANCEL_FLIGHT_FORMAT);
+		}
+
+		String sql = "UPDATE Flight set state = " + Flight.STATE_CANCELED +
+				" WHERE flight_id_official = " + flightId;
+		try {
+			Statement statement = Admin.connection.createStatement();
+			statement.executeUpdate(sql);
+			System.out.println("Flight " + flightId + " has been canceled.");
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println("Unable to cancel flight");
+			e.printStackTrace();
+			return;
 		}
 	}
 
@@ -145,6 +177,9 @@ public class Admin {
 				if (!Admin.parseCommand(command))
 					break;
 			}
+
+			// Close DB connection at the end
+			Admin.connection.close();
 		} catch (Exception e) {
 			System.out.println("Unable to interpret command");
 			e.printStackTrace();
