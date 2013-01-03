@@ -5,9 +5,10 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
-import javax.xml.rpc.Call;
 import javax.xml.rpc.Service;
 import javax.xml.rpc.ServiceFactory;
+
+import org.apache.axis.client.Call;
 
 /**
  * The client implementation which calls the webservice
@@ -26,17 +27,21 @@ public class Client {
 	public static final String BUY_TICKET_COMMAND		= "buyTicket";
 	public static final String BUY_TICKET_FORMAT		= BUY_TICKET_COMMAND +
 			" reservationId, creditCardInfo";
-	public static final String SEPARATOR = "--------------------------------";
+	public static final String SEPARATOR = "--------------------------------------------------------------";
 	public static String MENU;
+
 	public static String AIRSERVICE_URL;
+	public static final String AIRSERVICE_NAMESPACE 	= "http://localhost:8080/axis/services/AirService";
+	public static final String AIRSERVICE_NAME		= "AirServiceService";
+	public static QName serviceQN;
+	public static Service service;
 
 	/**
-	 * Parses a command and call the specific webservices
+	 * Parses a command and calls the specific webservices
 	 * @param command
 	 * @return
 	 */
 	public boolean parseCommand(String command) {
-		System.out.println("Command " + command);
 		if (command.equals("exit") || command.equals("quit"))
 			return false;
 		if (command.length() == 0)
@@ -56,34 +61,37 @@ public class Client {
 			callBuyTicket(st);
 			return true;
 		}
-		System.out.println("Unknown command!");
+		System.out.println("Unknown command! Try one of these:");
 		System.out.println(Client.MENU);
 		return true;
 	}
 
 	public void callGetRoute(StringTokenizer st) {
 		System.out.println("Calling get optimal route");
-		try{
-			String wsdlURL = Client.AIRSERVICE_URL;
-			String namespace = "http://localhost:8080/axis/services/AirService";
-			String serviceName = "AirService";
-			QName serviceQN = new QName(namespace, serviceName);
+		String source = st.nextToken();
+		String dest = st.nextToken();
+		int maxFlights = Integer.parseInt(st.nextToken());
+		int departureDay = Integer.parseInt(st.nextToken());
 
-			ServiceFactory serviceFactory = ServiceFactory.newInstance();
-			Service service = serviceFactory.createService(new
-					URL(wsdlURL), serviceQN);
-			Call call = service.createCall();
-			call.setPortTypeName(serviceQN);
-			call.setOperationName(new QName(namespace, "getOptimalRoute"));
+		try{
+			Call call = (Call)service.createCall();
+			call.setPortTypeName(Client.serviceQN);
+			call.setOperationName(new QName(Client.AIRSERVICE_NAMESPACE, "getOptimalRoute"));
 			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "");
 
-			call.addParameter("source", serviceQN, javax.xml.rpc.ParameterMode.IN);
-			call.setReturnType(serviceQN);
-			Object[] inParams = new Object[]{"Bucuresti"};
-			String ret = (String) call.invoke(inParams);
-			System.out.println("ret:" + ret);
+			call.addParameter("source", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+			call.addParameter("dest", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+			call.addParameter("maxFlights", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+			call.addParameter("departureDay", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+			call.setTargetEndpointAddress(Client.AIRSERVICE_URL);
+			call.setReturnClass(String[].class);
+			Object[] inParams = new Object[]{source, dest, maxFlights, departureDay };
 
-		} catch(Exception ex){
+			String[] ret = (String[]) call.invoke(inParams);
+			for (int i = 0; i < ret.length; i++)
+				System.out.println(ret[i]);
+		} catch(Exception ex) {
+			System.out.println("Error on calling getOptimalRoute webservice");
 			ex.printStackTrace();
 		}
 	}
@@ -96,11 +104,38 @@ public class Client {
 
 	}
 
+	/**
+	 * Initiates the web service to be called by the client
+	 * This will create a service when the client starts,
+	 * used by all the client commands
+	 */
+	private static void initWebService() {
+		System.out.print("Initiating the WebService... ");
+		try{
+			String namespace = "http://localhost:8080/axis/services/AirService";
+			String serviceName = "AirServiceService";
+			Client.serviceQN = new QName(namespace, serviceName);
+
+			ServiceFactory serviceFactory = ServiceFactory.newInstance();
+
+			// Create the static common service
+			Client.service = serviceFactory.createService(new
+					URL(Client.AIRSERVICE_URL), serviceQN);
+		} catch(Exception ex) {
+			System.out.println("Error on initiating webservice");
+			ex.printStackTrace();
+		}
+		System.out.println("WebService created");
+	}
+
 	public static void main (String [] args) {
 		System.out.println("Starting the client");
 		if (args.length < 1)
 			System.out.println("The webservice URL must be the first argument");
+
+		// Initiate the webservice
 		Client.AIRSERVICE_URL = args[0];
+		Client.initWebService();
 
 		// Build the command menu
 		Client.MENU = Client.SEPARATOR + "\n";
@@ -117,9 +152,10 @@ public class Client {
 			while(true) {
 				System.out.flush();
 				String command = scanner.nextLine();
-				if (client.parseCommand(command))
+				if (!client.parseCommand(command))
 					break;
 			}
+			System.out.println("While broken");
 		} catch (Exception e) {
 			System.out.println("Unable to interpret command");
 			e.printStackTrace();

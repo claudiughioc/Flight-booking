@@ -111,7 +111,9 @@ public class AirService implements WebAirService {
 		response[0] = "";
 		int i = 1;
 		for (Flight flight : finalRoute) {
-			response[0] += flight + "\n";
+			response[0] += flight;
+			if (i != finalRoute.size())
+				response[0] += "\n";
 			response[i] = flight.flightIdOfficial;
 			i++;
 		}
@@ -196,7 +198,7 @@ public class AirService implements WebAirService {
 	/**
 	 * Attempts to connect to the "airservice" DB
 	 */
-	public void createDBConnection() {
+	private void createDBConnection() {
 		System.out.println("Creating DB connection");
 		try {
 			Context ctx = new InitialContext();
@@ -218,7 +220,7 @@ public class AirService implements WebAirService {
 	/**
 	 * Initiates the list with all the flights
 	 */
-	public PriorityQueue<Flight> initAllFlights(int departureDay) {
+	private PriorityQueue<Flight> initAllFlights(int departureDay) {
 		PriorityQueue<Flight> availableFlights = new PriorityQueue<Flight>();
 
 		// Get all available flights
@@ -253,7 +255,7 @@ public class AirService implements WebAirService {
 	 * @param second
 	 * @return - duration in hours
 	 */
-	public int distanceBetweenFlights(Flight first, Flight second) {
+	private int distanceBetweenFlights(Flight first, Flight second) {
 		int distance = 0;
 		if (second.day + 1 >= first.day) {
 			distance = (second.day - 1 - first.day) * 24;
@@ -271,7 +273,7 @@ public class AirService implements WebAirService {
 	 * @param availableFlights
 	 * @return the Flight object corresponding to the root
 	 */
-	public Flight initRootInfo(String source, PriorityQueue<Flight> availableFlights) {
+	private Flight initRootInfo(String source, PriorityQueue<Flight> availableFlights) {
 		Flight root = new Flight(source, source);
 		root.cost = 0;
 		root.noFlights = 0;
