@@ -1,6 +1,7 @@
 package airService.client;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -66,6 +67,10 @@ public class Client {
 		return true;
 	}
 
+	/**
+	 * Calls the getOptimalRoute method from AirService
+	 * @param st
+	 */
 	public void callGetRoute(StringTokenizer st) {
 		System.out.println("Calling get optimal route");
 		String source = st.nextToken();
@@ -96,12 +101,59 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Calls bookTicket methods from AirService
+	 * @param st
+	 */
 	public void callBookTicket(StringTokenizer st) {
+		ArrayList<String> flights = new ArrayList<String>();
+		while(st.hasMoreTokens())
+			flights.add(st.nextToken());
+		String[] flightsArray = new String[flights.size()];
+		flightsArray = flights.toArray(flightsArray);
 
+		try{
+			Call call = (Call)service.createCall();
+			call.setPortTypeName(Client.serviceQN);
+			call.setOperationName(new QName(Client.AIRSERVICE_NAMESPACE, "bookTicket"));
+			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "");
+			call.addParameter("flightIds", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+			call.setTargetEndpointAddress(Client.AIRSERVICE_URL);
+			call.setReturnClass(String.class);
+			Object[] inParams = new Object[]{flightsArray};
+
+			String ret = (String) call.invoke(inParams);
+			System.out.println("Created reservation " + ret);
+		} catch(Exception ex) {
+			System.out.println("Error on calling bookTicket webservice");
+			ex.printStackTrace();
+		}
 	}
 
+	/**
+	 * Calls buyTicket method from AirService
+	 * @param st
+	 */
 	public void callBuyTicket(StringTokenizer st) {
+		String reservationId = st.nextToken();
+		String creditCardInfo = st.nextToken();
+		try{
+			Call call = (Call)service.createCall();
+			call.setPortTypeName(Client.serviceQN);
+			call.setOperationName(new QName(Client.AIRSERVICE_NAMESPACE, "buyTicket"));
+			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "");
+			call.addParameter("reservationId", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+			call.addParameter("creditCardInfo", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+			call.setTargetEndpointAddress(Client.AIRSERVICE_URL);
+			call.setReturnClass(String.class);
+			Object[] inParams = new Object[]{reservationId, creditCardInfo};
 
+			String ret = (String) call.invoke(inParams);
+			System.out.println("Bought ticket " + ret);
+		} catch(Exception ex) {
+			System.out.println("Error on calling bookTicket webservice");
+			ex.printStackTrace();
+		}
 	}
 
 	/**

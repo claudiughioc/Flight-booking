@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 public class AirService implements WebAirService {
 	public static final String DATASOURCE_JNDI_NAME = "java:comp/env/jdbc/airservice";
 	public Connection connection;
+	public static Object lock = new Object();
 
 	/**
 	 * Returns the best route (by duration) between two locations
@@ -126,38 +127,43 @@ public class AirService implements WebAirService {
 	 */
 	public String bookTicket(String[] flightIds) {
 		System.out.println("Booking ticket");
+		if (flightIds == null)
+			return "No arguments";
 
 		// Connect to the database
 		createDBConnection();
+		System.out.println("After creating db connection");
 
 		String sql = "";
 		boolean ok = true;
-		synchronized (AirService.class) {
-			for (int i = 0; i < flightIds.length; i++) {
-				int total = 0, booked = 0;
-				sql = "SELECT total_seats, booked_seats from Flight where " +
-						"flight_id_official = " + flightIds[i];
-				try {
-					Statement statement = connection.createStatement();
-					ResultSet rs = statement.executeQuery(sql);
-					while(rs.next()) {
-						total = rs.getInt(1);
-						booked = rs.getInt(2);
-					}
-					if (booked + 1 > total)
-						ok = false;
-					rs.close();
-					statement.close();
-				} catch (SQLException e) {
-					System.out.println("Error on retrieving flight information: " + e);
-					e.printStackTrace();
+		System.out.println("Len is " + flightIds.length);
+		for (int i = 0; i < flightIds.length; i++) {
+			int total = 0, booked = 0;
+			sql = "SELECT total_seats, booked_seats from Flight where " +
+					"flight_id_official = " + flightIds[i];
+			try {
+				Statement statement = connection.createStatement();
+				ResultSet rs = statement.executeQuery(sql);
+				while(rs.next()) {
+					total = rs.getInt(1);
+					booked = rs.getInt(2);
 				}
+				if (booked + 1 > total)
+					ok = false;
+				rs.close();
+				statement.close();
+			} catch (SQLException e) {
+				System.out.println("Error on retrieving flight information: " + e);
+				e.printStackTrace();
 			}
-			if (ok)
-				System.out.println("The reservation can be made");
-			else
-				System.out.println("There is a full plane");
+			if (!ok)
+				break;
 		}
+		if (ok)
+			System.out.println("The reservation can be made");
+		else
+			System.out.println("There is a full plane");
+		//}
 		return "bookTicket";
 	}
 
@@ -166,31 +172,22 @@ public class AirService implements WebAirService {
 	 * A reservation must be done beforehand
 	 */
 	public String buyTicket(String reservationId, String creditCardInfo) {
-		// Getting the JDBC DataSource
 		System.out.println("Buying ticket reservation " + reservationId + " creditCard " + creditCardInfo);
+		// Connect to the database
+		createDBConnection();
 
-		Connection conn;
 		try {
-			Context ctx = new InitialContext();
-			DataSource ds = (DataSource) ctx.lookup(DATASOURCE_JNDI_NAME);
-			conn = ds.getConnection();
-			Statement st = conn.createStatement();
+			Statement st = connection.createStatement();
 			String sql = "SELECT source, destination from Flight";
 			ResultSet rs = st.executeQuery(sql);
-			
 			while (rs.next()) {
 			}
-			conn.close();
-		} catch (NamingException e) {
-			System.out.println("Error on creating context" + e);
-			e.printStackTrace();
-			return null;
+			st.close();
 		} catch (SQLException e) {
 			System.out.println("Error on creating connection to DB " + e);
 			e.printStackTrace();
 			return null;
 		}
-		
 		return "buyTicketOut";
 	}
 
