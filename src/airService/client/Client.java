@@ -7,9 +7,15 @@ import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.Service;
+import javax.xml.rpc.ServiceException;
 import javax.xml.rpc.ServiceFactory;
+import javax.xml.rpc.encoding.TypeMapping;
+import javax.xml.rpc.encoding.TypeMappingRegistry;
 
 import org.apache.axis.client.Call;
+import org.apache.axis.encoding.ser.BeanDeserializerFactory;
+import org.apache.axis.encoding.ser.BeanSerializerFactory;
+
 
 /**
  * The client implementation which calls the webservice
@@ -111,16 +117,45 @@ public class Client {
 			flights.add(st.nextToken());
 		String[] flightsArray = new String[flights.size()];
 		flightsArray = flights.toArray(flightsArray);
+		ArrayOfString flightsObj = new ArrayOfString(flightsArray);
 
+		// Register a new type to send an array of String to the web service
+		try {
+			ServiceFactory factory1 = ServiceFactory.newInstance();
+			QName qnTick = new QName("http://soapinterop.org/xsd", "ArrayOfString");
+		    Service serviceTickReq;
+			serviceTickReq = factory1.createService(qnTick);
+			TypeMappingRegistry tmr = (TypeMappingRegistry) serviceTickReq
+	                .getTypeMappingRegistry();
+	        TypeMapping tm = (TypeMapping) tmr.getDefaultTypeMapping();
+	        tm.register(ArrayOfString.class, qnTick, new BeanSerializerFactory(
+	                ArrayOfString.class, qnTick), new BeanDeserializerFactory(
+	                ArrayOfString.class, qnTick));
+
+	        TypeMappingRegistry tmr1 = (TypeMappingRegistry) serviceTickReq
+	                .getTypeMappingRegistry();
+	        TypeMapping tm1 = (TypeMapping) tmr1.getDefaultTypeMapping();
+	        tm1.register(String[].class, qnTick, new BeanSerializerFactory(
+	                String[].class, qnTick), new BeanDeserializerFactory(
+	                String[].class, qnTick));
+		} catch (ServiceException e) {
+			System.out.println("Error on registering new type");
+			e.printStackTrace();
+		}
+
+		// Call the bookTicket method
 		try{
 			Call call = (Call)service.createCall();
 			call.setPortTypeName(Client.serviceQN);
 			call.setOperationName(new QName(Client.AIRSERVICE_NAMESPACE, "bookTicket"));
 			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "");
-			call.addParameter("flightIds", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+
+			// Use the newly created type for the parameters
+	        call.addParameter("flightIds", new QName("ArrayOfString"),  
+	                ArrayOfString.class, javax.xml.rpc.ParameterMode.IN);
 			call.setTargetEndpointAddress(Client.AIRSERVICE_URL);
 			call.setReturnClass(String.class);
-			Object[] inParams = new Object[]{flightsArray};
+			Object[] inParams = new Object[]{flightsObj};
 
 			String ret = (String) call.invoke(inParams);
 			System.out.println("Created reservation " + ret);
