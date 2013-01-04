@@ -4,9 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -21,6 +18,7 @@ import javax.sql.DataSource;
  */
 public class AirService implements WebAirService {
 	public static final String DATASOURCE_JNDI_NAME = "java:comp/env/jdbc/airservice";
+	public static final int MAXIMUM_COST	= 99999999;
 	public Connection connection;
 	public static Object lock = new Object();
 
@@ -31,94 +29,40 @@ public class AirService implements WebAirService {
 			int departureDay) {
 		System.out.println("Getting optimal route from " + source + " to " + dest +
 				" maxFlights " + maxFlights + " day " + departureDay);
-		int noFlights = 0;
 
 		// Connect to the database
 		createDBConnection();
 
-		// Initiate all available flights
-		PriorityQueue<Flight> availableFlights = initAllFlights(departureDay);
-		ArrayList<Flight> auxList = new ArrayList<Flight>();
-		// Create a root and an end dummy Fligths 
-		Flight rootDummyFlight = initRootInfo(source, availableFlights);
-		Flight endDummyFlight = new Flight(dest, dest);
-		endDummyFlight.day = 366;
-		endDummyFlight.hour = 25;
-		availableFlights.add(rootDummyFlight);
-		availableFlights.add(endDummyFlight);
-		
-		// Apply the Dijkstra algorithm
-		while (!availableFlights.isEmpty()) {
-			Flight current = availableFlights.remove();
-			auxList.add(current);
-			System.out.println("Removed from queue " + current);
-			if (current.cost == Flight.MAXIMUM_COST)
-				break;
+		String [] finalFlightIds = null;
+		try {
+			Statement st = connection.createStatement();
+			int minCost = MAXIMUM_COST;
+			
+			for (int i = 1; i <= maxFlights; i++) {
+				String sql = createSQLQuerry(i, source, dest) + " \n";
+				ResultSet rs = st.executeQuery(sql);
+				String [] fligthIds = new String[i + 1];
 
-			PriorityQueue<Flight> copy = new PriorityQueue<Flight>(availableFlights);
-			for (Flight connection : availableFlights) {
-				// Select only the connected flights later than the current
-				if (!connection.source.equals(current.destination) ||
-						(connection.day < current.day) || (connection.day == current.day && connection.hour < current.hour))
-					continue;
-
-				// Add the current cost for all the flights except the root
-				int alt;
-				if (!current.source.equals(current.destination))
-					alt = current.cost - current.duration + distanceBetweenFlights(current, connection);
-				else
-					// Add cost for dummy flights
-					if (current.source.equals(source))
-						alt = connection.duration;
-					else
-						alt = current.cost;
-
-				if (alt < connection.cost && (current.noFlights <= maxFlights)) {
-					connection.cost = alt;
-					connection.previous = current;
-					connection.noFlights = current.noFlights + 1;
-
-					// Re-add the changed objects in a copied queue
-					copy.remove(connection);
-					copy.add(connection);
-					System.out.println("Connection: " + current + " and " + connection + " total cost " + connection.cost);
+				while (rs.next()) {
+					int cost = rs.getInt(i + 1);
+					if (cost < minCost) {
+						for (int j = 1; j <= i; j++)
+							fligthIds[j] = rs.getString(j);
+						minCost = cost;
+						finalFlightIds = fligthIds;
+					}
 				}
 			}
-
-			// Force the reordering of the queue
-			availableFlights = new PriorityQueue<Flight>(copy);
-		}
-		
-		for (Flight flight : auxList)
-			if (flight.source.equals(flight.destination) && flight.destination.equals(dest))
-				endDummyFlight = flight;
-		if (endDummyFlight.previous == null)
-			return new String[]{"No route from " + source + " to " + dest};
-
-		System.out.println("Arrival with flight " + endDummyFlight);
-
-		// Build the correctly ordered route
-		LinkedList<Flight> finalRoute = new LinkedList<Flight>();
-		while (true) {
-			Flight previous = endDummyFlight.previous;
-			if (previous.source.equals(source) && previous.source.equals(previous.destination))
-				break;
-			finalRoute.addFirst(previous);
-			endDummyFlight = previous;
+		} catch (SQLException e) {
+			System.out.println("Error on connecting to the db");
+			e.printStackTrace();
+			return null;
 		}
 
-		// Built the formatted String array
-		String [] response = new String[finalRoute.size() + 1];
-		response[0] = "";
-		int i = 1;
-		for (Flight flight : finalRoute) {
-			response[0] += flight;
-			if (i != finalRoute.size())
-				response[0] += "\n";
-			response[i] = flight.flightIdOfficial;
-			i++;
-		}
-		return response;
+		if (finalFlightIds != null) {
+			finalFlightIds[0] = "";
+			return finalFlightIds;
+		} else return new String[] {"No route found"};
 	}
 
 
@@ -195,7 +139,7 @@ public class AirService implements WebAirService {
 			ResultSet rs = st.executeQuery(sql);
 			while (rs.next())
 				ticketId = rs.getInt(1);
-			
+
 			// Create a new Ticket
 			ticketId++;
 			sql = "INSERT INTO Ticket (id, reservation_id, creditCardInfo) " +
@@ -282,67 +226,39 @@ public class AirService implements WebAirService {
 		System.out.println("Connection ok");
 	}
 
-	
-	/**
-	 * Initiates the list with all the flights
-	 */
-	private PriorityQueue<Flight> initAllFlights(int departureDay) {
-		PriorityQueue<Flight> availableFlights = new PriorityQueue<Flight>();
-
-		// Get all available flights
-		String sql = "SELECT id, flight_id_official, source, destination, hour, day, " +
-				"duration, state, total_seats, booked_seats from Flight where day >= " +
-				departureDay + " and state = " + Flight.STATE_AVAILABLE;
-		
-		try {
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery(sql);
-
-			// Create the list with available flights
-			while (rs.next())
-				availableFlights.add(new Flight(rs.getInt(1), rs.getInt(5),
-						rs.getInt(6), rs.getInt(7), rs.getInt(8),
-						rs.getInt(9), rs.getInt(10), rs.getString(2),
-						rs.getString(3), rs.getString(4)));
-			statement.close();
-			connection.close();
-		} catch (SQLException e) {
-			System.out.println("Exception on creating query");
-			e.printStackTrace();
-			return null;
-		}
-		return availableFlights;
-	}
-
 
 	/**
-	 * Calculate the cost between two Flights
-	 * @param first
-	 * @param second
-	 * @return - duration in hours
-	 */
-	private int distanceBetweenFlights(Flight first, Flight second) {
-		int distance = 0;
-		if (second.day + 1 >= first.day) {
-			distance = (second.day - 1 - first.day) * 24;
-			distance += (24 - first.hour) + second.hour;
-		} else
-			distance = second.hour - first.hour;
-		distance += second.duration;
-		return distance;
-	}
-
-
-	/**
-	 * Initialize information for a dummy flight, the root of the graph
+	 * Creates a part of the sql querry to extract shortest path
+	 * for a maximum number of Flights
+	 * @param maxFlights
 	 * @param source
-	 * @param availableFlights
-	 * @return the Flight object corresponding to the root
+	 * @param dest
+	 * @return
 	 */
-	private Flight initRootInfo(String source, PriorityQueue<Flight> availableFlights) {
-		Flight root = new Flight(source, source);
-		root.cost = 0;
-		root.noFlights = 0;
-		return root;
+	public String createSQLQuerry(int maxFlights, String source, String dest) {
+		String sql = "SELECT ";
+		String []flights = new String[maxFlights];
+		for (int i = 0; i < maxFlights; i++) {
+			flights[i] = "f" + i;
+			sql += flights[i] + ".flight_id_official, ";
+		}
+		sql += "if(" + flights[maxFlights - 1] + ".day = " + flights[0] +
+				".day, " + flights[maxFlights - 1] + ".hour - " + flights[0] +
+				".hour, (" + flights[maxFlights - 1] + ".day - " + flights[0] +
+				".day - 1) * 24 + " + flights[maxFlights - 1] +
+				".hour + (24 - " + flights[0] + ".hour)) + "  +
+				flights[maxFlights - 1] + ".duration cost";
+		sql += " from Flight " + flights[0] + " ";
+		for (int i = 1; i < maxFlights; i++)
+			sql += " join Flight " + flights[i] + " on " + flights[i - 1] + 
+			".destination = " + flights[i] + ".source and ((" +
+			flights[i - 1] + ".day < " + flights[i] +
+			".day) or (" + flights[i - 1] + ".day = " +
+			flights[i] + ".day and " + flights[i - 1] +
+			".hour + " + flights[i - 1] + ".duration < " + flights[i] + ".hour))";
+		sql += " where f" + 0 + ".source = \"" + source +
+				"\" and f" + (maxFlights - 1) + ".destination = \"" + dest + "\"" +
+				" order by cost ASC limit 1;";
+		return sql;
 	}
 }
