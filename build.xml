@@ -56,7 +56,7 @@
                 <pathelement path="${build.dir}"/>
                 <path refid="master-classpath"/>
             </classpath>
-            <arg line="-lhttp://localhost:8080/axis/services/AdminService deploy.wsdd"/>
+            <arg line="-lhttp://localhost:8080/axis/services/AdminService resources/deploy.wsdd"/>
         </java>
 
         </target>

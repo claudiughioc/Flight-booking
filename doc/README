@@ -1,0 +1,77 @@
+GHIOC CONSTANTIN CLAUDIU 341 C1
+SISTEME DE PROGRAME PENTRU RETELE DE CALCULATOARE
+TEMA 4
+
+
+                                Serviciu web pentru rezervarea biletelor de avion
+
+
+1.  ENUNT
+2.  INSTALARE SI UTILIZARE
+3.  IMPLEMENTARE
+4.  CONTINUT ARHIVA
+
+
+
+1.  ENUNT
+    Se cere implementarea unui serviciu web pentru rezervarea si cumpararea de bilete de avion si a unor clase ajutatoare, conform cu urmatoarele cerinte:
+    · serviciul web, AirplaneService, ofera metode pentru aflarea rutei optime intre doua destinatii, pentru rezervare si pentru cumparare de bilete
+    · evidenta zborurilor, a rezervarilor si a biletelor cumparate se tine intr-o baza de date MySQL.
+    · pentru administrarea informatiilor legate de zboruri se va implementa o aplicatie Java stand-alone care se conecteaza la aceeasi baza de date prin JDBC.
+    · pentru testare se va scrie un client pentru serviciul web, cu o interfata de tip text ce va contine un meniu cu operatiile posibile. Clientul va avea ca parametru in linia de comanda URL-ul corespunzator serviciului.
+
+
+2.  INSTALARE SI UTILIZARE
+    Am folosit apache-tomcat-6.0.36 si axis-1_4 pentru construirea serverului.
+
+    !!!    Aplicatia are nevoie ca fisierele axis-1_4/webapps/axis sa fie in apache-tomcat-6.0.36/webapps/, asa cum se precizeaza in exemplul din laborator.
+
+    Pentru copierea fisierelor de configurare tomcat si construirea bazei de date mysql se poate rula scriptul "init.sh" din directorul temei. Inainte de asta, trebuie schimbata calea catre serverul tomcat in variabila TOMCAT_PATH.
+    !!!    Scriptul de initiere al bazei de date este scris in PHP.
+    !!!    Detaliile de conectare la baza de date (host, username, password) trebuie configurate in urmatoarele fisiere:
+    *   scripts/createDatabase.php pentru crearea bazei de date
+    *   resources/context.xml pentru serverul tomcat
+    *   resources/admin_login.properties pentru aplicatia de administrare
+
+    *   ./init.sh;
+    *   Serverul tomcat trebuie pornit: ./$TOMCAT_PATH/bin/startup.sh;
+        Fisierul build.xml pune la dispozitie 3 target-uri importante:
+    *   ant deploy: copiaza fisierele .class in serverul tomcat si face deploy la aplicatia web. Se va obtine astfel serviciul "AirService";
+    *   ant client: porneste aplicatia client care ofera 3 comenzi:
+             getOptimalRoute source, destination, maxFlights, departureDay
+             bookTicket flightID1, flightId2, ... , flightIdn
+             buyTicket reservationId, creditCardInfo
+             !!!    URL-ul catre serviciu poate fi schimbat in build.xml la targetul client
+             !!!    Pentru apelarea serviciilor clientul foloseste un namespace si service name care sunt hardcoded in "src/airService/client/Client.java"
+    *   ant admin: porneste aplicatia de administrare care ofera 2 comenzi:
+            adaugare_Zbor source, destination, departureDay, departureHour, duration, numberOfSeats, flightId
+            anulare_Zbor flightId
+
+3.  IMPLEMENTARE
+    A.  BAZA DE DATE
+        Am folosit 4 tabele:
+    *   Flight contine toate detaliile unui zbor, asa cum se cere in enunt;
+    *   FlightReservation si Reservation sunt folosite pentru realizarea unei rezervari. Prima tabela contine referinte la Flight, deci reprezinta rezervari pentru fiecare zbor in parte, iar la realizarea unei rezervari pentru o anumita ruta se va crea o intrare in Reservation si mai multe intrari in FlightReservation cu referinte la linia noua din Reservation;
+    *   Ticket contine detaliile despre bilet si referinta la rezervarea facuta (Reservation);
+
+    B.  SERVER
+        Aplicatia server ofera cele 3 servicii:
+        GetOptimalRoute este implementata in principiu prin executarea unor query-uri SQL. Pentru o ruta cu maxim n zboruri se considera toate rutele posibile de lungime de la 1 la n, considurandu-se de fiecare data cea mai scurta ca timp. Acest lucru se face prin join-uri repetate cu tabela Flight, cu conditia ca destinatia unui zbor sa fie aceeasi sursa urmatorului zbor, iar ora de plecare sa fie favorabila.
+        BookTicket verifica fiecare zbor din ruta sa fie in starea "Available" si sa aiba locuri libere. Daca toate zborurile indeplinesc aceste cerinte se creeaza intrari in FlightReservation pentru fiecare zbor si o singura intrare in Reservation. Ca rezultat se intoarce id-ul liniei nou introduse in Reservation.
+        BuyTicket creeaza o linie nou in tabela Ticket pe baza id-ului de rezervare primit.
+
+    C.  ADMIN
+        Aplicatia de administrarea realizeaza la inceput o conexiune la baza de date folosind detaliile din fisierul de proprietati "resources/admin_login.properties" cu DriverManager si asteapta comenzi. Pentru fiecare comanda creeaza query-uri sql si le executa prin JDBC.
+
+    D.  CLIENT
+        La pornirea aplicatiei client se realizeaza legatura cu webservice-ul AirService folosindu-se URL-ul dat ca parametru. Asteapta comenzi, realizeaza apeluri (Call) catre webservice in functie de parametrii dati si afiseaza rezultatele.
+
+
+4.  CONTINUT ARHIVA
+    *   fisierele surse in folderul src
+    *   directorul doc contine enuntul temei si README-ul
+    *   directorul scripts contine scriptul de creare a bazei de date in php
+    *   directorul resources contine fisierul de proprietati pentru admin ("admin_login.properties"), fisierele de configurare pentru serverul de tomcat ("context.xml" si "web.xml"), fisierul necesar deployment-ului aplicatiei ("deploy.wsdd"), jar-ul de mysql-connector necesar pentru conectarea serverului de tomcat la baza de date;
+    *   scriptul init.sh de initializare a serverului si de crearea a bazei de date
+    *   fisierul build.xml
+    *   fisierul README
