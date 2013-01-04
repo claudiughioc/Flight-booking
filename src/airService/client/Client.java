@@ -73,7 +73,6 @@ public class Client {
 	 * @param st
 	 */
 	public void callGetRoute(StringTokenizer st) {
-		System.out.println("Calling get optimal route");
 		String source = st.nextToken();
 		String dest = st.nextToken();
 		int maxFlights = Integer.parseInt(st.nextToken());
@@ -129,7 +128,7 @@ public class Client {
 			Object[] inParams = new Object[]{flightsArray};
 
 			String ret = (String) call.invoke(inParams);
-			if (ret == "")
+			if (ret.equals(""))
 				System.out.println("The reservation could not be made. There is a canceled or a full flight.");
 			else
 				System.out.println("Created reservation " + ret);
@@ -158,7 +157,10 @@ public class Client {
 			Object[] inParams = new Object[]{reservationId, creditCardInfo};
 
 			String ret = (String) call.invoke(inParams);
-			System.out.println("Bought ticket " + ret);
+			if (ret.equals(""))
+				System.out.println("Unable to buy ticket");
+			else
+				System.out.println("Bought ticket " + ret);
 		} catch(Exception ex) {
 			System.out.println("Error on calling bookTicket webservice");
 			ex.printStackTrace();
@@ -173,10 +175,7 @@ public class Client {
 	private static void initWebService() {
 		System.out.print("Initiating the WebService... ");
 		try{
-			String namespace = "http://localhost:8080/axis/services/AirService";
-			String serviceName = "AirServiceService";
-			Client.serviceQN = new QName(namespace, serviceName);
-
+			Client.serviceQN = new QName(AIRSERVICE_NAMESPACE, AIRSERVICE_NAME);
 			ServiceFactory serviceFactory = ServiceFactory.newInstance();
 
 			// Create the static common service
@@ -203,7 +202,7 @@ public class Client {
 		Client.MENU += Client.GET_ROUTE_FORMAT + "\n";
 		Client.MENU += Client.BOOK_TICKET_FORMAT + "\n";
 		Client.MENU += Client.BUY_TICKET_FORMAT + "\n";
-		Client.MENU += Client.SEPARATOR +"\n";
+		Client.MENU += Client.SEPARATOR;
 		System.out.println(Client.MENU);
 
 		Client client = new Client();
@@ -216,7 +215,6 @@ public class Client {
 				if (!client.parseCommand(command))
 					break;
 			}
-			System.out.println("While broken");
 		} catch (Exception e) {
 			System.out.println("Unable to interpret command");
 			e.printStackTrace();

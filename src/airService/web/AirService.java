@@ -182,23 +182,34 @@ public class AirService implements WebAirService {
 	 * A reservation must be done beforehand
 	 */
 	public String buyTicket(String reservationId, String creditCardInfo) {
+		String result = "";
 		System.out.println("Buying ticket reservation " + reservationId + " creditCard " + creditCardInfo);
 		// Connect to the database
 		createDBConnection();
 
 		try {
+			int ticketId = 0;
+			// Get the last ticket Id
 			Statement st = connection.createStatement();
-			String sql = "SELECT source, destination from Flight";
+			String sql = "SELECT max(id) from Ticket;";
 			ResultSet rs = st.executeQuery(sql);
-			while (rs.next()) {
-			}
+			while (rs.next())
+				ticketId = rs.getInt(1);
+			
+			// Create a new Ticket
+			ticketId++;
+			sql = "INSERT INTO Ticket (id, reservation_id, creditCardInfo) " +
+					"value (" + ticketId + ", " + reservationId + ", " + creditCardInfo + ")";
+			st.executeUpdate(sql);
+			result += ticketId;
 			st.close();
+			connection.close();
 		} catch (SQLException e) {
 			System.out.println("Error on creating connection to DB " + e);
 			e.printStackTrace();
-			return null;
+			return "";
 		}
-		return "buyTicketOut";
+		return result;
 	}
 
 
@@ -241,6 +252,7 @@ public class AirService implements WebAirService {
 				System.out.println("Reserved flight" + flightIds[i]);
 			}
 			reservationId += lastReservation;
+			connection.close();
 		} catch (SQLException e) {
 			System.out.println("Error on creating reservation");
 			e.printStackTrace();
