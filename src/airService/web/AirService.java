@@ -132,14 +132,14 @@ public class AirService implements WebAirService {
 
 		// Connect to the database
 		createDBConnection();
-		System.out.println("After creating db connection");
 
 		String sql = "";
 		boolean ok = true;
 		System.out.println("Len is " + flightIds.length);
 		for (int i = 0; i < flightIds.length; i++) {
-			int total = 0, booked = 0;
-			sql = "SELECT total_seats, booked_seats from Flight where " +
+			System.out.println("Processing flight " + flightIds[i]);
+			int total = 0, booked = 0, state = Flight.STATE_CANCELED;
+			sql = "SELECT total_seats, booked_seats, state from Flight where " +
 					"flight_id_official = " + flightIds[i];
 			try {
 				Statement statement = connection.createStatement();
@@ -147,9 +147,12 @@ public class AirService implements WebAirService {
 				while(rs.next()) {
 					total = rs.getInt(1);
 					booked = rs.getInt(2);
+					state = rs.getInt(3);
 				}
-				if (booked + 1 > total)
+				// Overbooking and canceled test
+				if (booked + 1 > (total * 1.1) || state == Flight.STATE_CANCELED)
 					ok = false;
+
 				rs.close();
 				statement.close();
 			} catch (SQLException e) {
@@ -159,12 +162,19 @@ public class AirService implements WebAirService {
 			if (!ok)
 				break;
 		}
+
+		// Closing connection to database
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			System.out.println("Error on closing connection");
+			e.printStackTrace();
+		}
+
 		if (ok)
-			System.out.println("The reservation can be made");
+			return createReservation(flightIds);
 		else
-			System.out.println("There is a full plane");
-		//}
-		return "bookTicket";
+			return "";
 	}
 
 	/**
@@ -189,6 +199,53 @@ public class AirService implements WebAirService {
 			return null;
 		}
 		return "buyTicketOut";
+	}
+
+
+	/**
+	 * Creates a reservation to a series of flights
+	 * @return the reservation Id
+	 */
+	private String createReservation(String [] flightIds) {
+		String reservationId = "";
+		// Connect to the DB
+		createDBConnection();
+
+		String sql = "SELECT max(id) from Reservation;";
+		String insert = "INSERT into Reservation (id) value (";
+		try {
+			// Get the last reservation ID
+			Statement st = connection.createStatement();
+			ResultSet rs = st.executeQuery(sql);
+			int lastReservation = 0;
+			while (rs.next())
+				lastReservation = rs.getInt(1);
+			rs.close();
+
+			// Create a new Reservation
+			lastReservation++;
+			insert += lastReservation + ")";
+			st.executeUpdate(insert);
+
+			// Create the Flight Reservations
+			for (int i = 0; i < flightIds.length; i++) {
+				insert = "INSERT INTO FlightReservation " +
+						"(flight_id_official, reservation_id) " +
+						"value (" + flightIds[i] + ", " + lastReservation + ")";
+				st.executeUpdate(insert);
+
+				// Update the current flight's number of seats
+				String update = "UPDATE Flight set booked_seats = booked_seats + 1 " +
+						" where flight_id_official = " + flightIds[i];
+				st.executeUpdate(update);
+				System.out.println("Reserved flight" + flightIds[i]);
+			}
+			reservationId += lastReservation;
+		} catch (SQLException e) {
+			System.out.println("Error on creating reservation");
+			e.printStackTrace();
+		}
+		return reservationId;
 	}
 
 
