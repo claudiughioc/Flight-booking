@@ -37,7 +37,7 @@ public class AirService implements WebAirService {
 		try {
 			Statement st = connection.createStatement();
 			int minCost = MAXIMUM_COST;
-			
+
 			for (int i = 1; i <= maxFlights; i++) {
 				String sql = createSQLQuerry(i, source, dest) + " \n";
 				ResultSet rs = st.executeQuery(sql);
@@ -53,6 +53,8 @@ public class AirService implements WebAirService {
 					}
 				}
 			}
+			// Close the DB connection
+			connection.close();
 		} catch (SQLException e) {
 			System.out.println("Error on connecting to the db");
 			e.printStackTrace();
@@ -60,7 +62,7 @@ public class AirService implements WebAirService {
 		}
 
 		if (finalFlightIds != null) {
-			finalFlightIds[0] = "";
+			finalFlightIds[0] = getRouteDetails(finalFlightIds);
 			return finalFlightIds;
 		} else return new String[] {"No route found"};
 	}
@@ -235,7 +237,7 @@ public class AirService implements WebAirService {
 	 * @param dest
 	 * @return
 	 */
-	public String createSQLQuerry(int maxFlights, String source, String dest) {
+	private String createSQLQuerry(int maxFlights, String source, String dest) {
 		String sql = "SELECT ";
 		String []flights = new String[maxFlights];
 		for (int i = 0; i < maxFlights; i++) {
@@ -260,5 +262,41 @@ public class AirService implements WebAirService {
 				"\" and f" + (maxFlights - 1) + ".destination = \"" + dest + "\"" +
 				" order by cost ASC limit 1;";
 		return sql;
+	}
+
+
+	/**
+	 * Builds details about all the Flights in a Route
+	 * @param finalFlightIds
+	 * @return
+	 */
+	private String getRouteDetails(String [] finalFlightIds) {
+		String details = "";
+
+		// Create the DB connection
+		createDBConnection();
+
+		try {
+			Statement st = connection.createStatement();
+			ResultSet res;
+			for (int i = 1; i < finalFlightIds.length; i++) {
+				String sql = "SELECT source, destination, day, hour, duration," +
+						" total_seats, booked_seats from Flight where " +
+						" flight_id_official = " + finalFlightIds[i];
+				res = st.executeQuery(sql);
+				while (res.next())
+					details += "Flight " + finalFlightIds[i] + " (" + res.getString(1) +
+						" - " + res.getString(2) +", day " + res.getInt(3) +
+						", hour " + res.getInt(4) + ", duration " + res.getInt(5) +
+						", total_seats " + res.getInt(6) + ", booked_seats " +
+						res.getInt(7) + ") ";
+			}
+			connection.close();
+		} catch (SQLException e) {
+			System.out.println("Error on retrieving route details");
+			e.printStackTrace();
+			return "";
+		}
+		return details;
 	}
 }
