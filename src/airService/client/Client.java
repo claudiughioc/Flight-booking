@@ -7,14 +7,9 @@ import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.Service;
-import javax.xml.rpc.ServiceException;
 import javax.xml.rpc.ServiceFactory;
-import javax.xml.rpc.encoding.TypeMapping;
-import javax.xml.rpc.encoding.TypeMappingRegistry;
 
 import org.apache.axis.client.Call;
-import org.apache.axis.encoding.ser.BeanDeserializerFactory;
-import org.apache.axis.encoding.ser.BeanSerializerFactory;
 
 
 /**
@@ -117,48 +112,27 @@ public class Client {
 			flights.add(st.nextToken());
 		String[] flightsArray = new String[flights.size()];
 		flightsArray = flights.toArray(flightsArray);
-		ArrayOfString flightsObj = new ArrayOfString(flightsArray);
-
-		// Register a new type to send an array of String to the web service
-		try {
-			ServiceFactory factory1 = ServiceFactory.newInstance();
-			QName qnTick = new QName("http://soapinterop.org/xsd", "ArrayOfString");
-		    Service serviceTickReq;
-			serviceTickReq = factory1.createService(qnTick);
-			TypeMappingRegistry tmr = (TypeMappingRegistry) serviceTickReq
-	                .getTypeMappingRegistry();
-	        TypeMapping tm = (TypeMapping) tmr.getDefaultTypeMapping();
-	        tm.register(ArrayOfString.class, qnTick, new BeanSerializerFactory(
-	                ArrayOfString.class, qnTick), new BeanDeserializerFactory(
-	                ArrayOfString.class, qnTick));
-
-	        TypeMappingRegistry tmr1 = (TypeMappingRegistry) serviceTickReq
-	                .getTypeMappingRegistry();
-	        TypeMapping tm1 = (TypeMapping) tmr1.getDefaultTypeMapping();
-	        tm1.register(String[].class, qnTick, new BeanSerializerFactory(
-	                String[].class, qnTick), new BeanDeserializerFactory(
-	                String[].class, qnTick));
-		} catch (ServiceException e) {
-			System.out.println("Error on registering new type");
-			e.printStackTrace();
-		}
 
 		// Call the bookTicket method
-		try{
+		try {
 			Call call = (Call)service.createCall();
 			call.setPortTypeName(Client.serviceQN);
 			call.setOperationName(new QName(Client.AIRSERVICE_NAMESPACE, "bookTicket"));
-			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "");
-
-			// Use the newly created type for the parameters
-	        call.addParameter("flightIds", new QName("ArrayOfString"),  
-	                ArrayOfString.class, javax.xml.rpc.ParameterMode.IN);
+			call.setProperty(Call.SOAPACTION_USE_PROPERTY, new Boolean(true));
+			call.setProperty(Call.SOAPACTION_URI_PROPERTY, "");
+			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "http://schemas.xmlsoap.org/soap/encoding/");
+			call.setProperty(Call.OPERATION_STYLE_PROPERTY, "rpc");
+			QName stringArray = new QName("http://echo.demo.oracle/", "stringArray");
+			call.addParameter("flightIds", stringArray, String[].class, javax.xml.rpc.ParameterMode.IN);
 			call.setTargetEndpointAddress(Client.AIRSERVICE_URL);
 			call.setReturnClass(String.class);
-			Object[] inParams = new Object[]{flightsObj};
+			Object[] inParams = new Object[]{flightsArray};
 
 			String ret = (String) call.invoke(inParams);
-			System.out.println("Created reservation " + ret);
+			if (ret == "")
+				System.out.println("The reservation could not be made. There is a canceled or a full flight.");
+			else
+				System.out.println("Created reservation " + ret);
 		} catch(Exception ex) {
 			System.out.println("Error on calling bookTicket webservice");
 			ex.printStackTrace();
