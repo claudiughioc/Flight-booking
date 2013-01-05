@@ -33,10 +33,6 @@ public class Client {
 	public static String MENU;
 
 	public static String AIRSERVICE_URL;
-	public static final String AIRSERVICE_NAMESPACE 	= "http://localhost:8080/axis/services/AirService";
-	public static final String AIRSERVICE_NAME		= "AirServiceService";
-	public static QName serviceQN;
-	public static Service service;
 
 	/**
 	 * Parses a command and calls the specific webservices
@@ -78,16 +74,18 @@ public class Client {
 		int maxFlights = Integer.parseInt(st.nextToken());
 		int departureDay = Integer.parseInt(st.nextToken());
 
-		try{
+		try {
+			org.apache.axis.client.Service service = new org.apache.axis.client.Service();
 			Call call = (Call)service.createCall();
-			call.setPortTypeName(Client.serviceQN);
-			call.setOperationName(new QName(Client.AIRSERVICE_NAMESPACE, "getOptimalRoute"));
+			call.setTargetEndpointAddress(new URL(Client.AIRSERVICE_URL));
+			call.setOperationName(new QName("getOptimalRoute"));
 			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "");
-
-			call.addParameter("source", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
-			call.addParameter("dest", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
-			call.addParameter("maxFlights", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
-			call.addParameter("departureDay", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+			QName string = new QName("http://echo.demo.oracle/", "string");
+			QName intType = new QName("http://echo.demo.oracle/", "int");
+			call.addParameter("source", string, String.class, javax.xml.rpc.ParameterMode.IN);
+			call.addParameter("dest", string, String.class, javax.xml.rpc.ParameterMode.IN);
+			call.addParameter("maxFlights", intType, javax.xml.rpc.ParameterMode.IN);
+			call.addParameter("departureDay", intType, javax.xml.rpc.ParameterMode.IN);
 			call.setTargetEndpointAddress(Client.AIRSERVICE_URL);
 			call.setReturnClass(String[].class);
 			Object[] inParams = new Object[]{source, dest, maxFlights, departureDay };
@@ -114,9 +112,11 @@ public class Client {
 
 		// Call the bookTicket method
 		try {
+			org.apache.axis.client.Service service = new org.apache.axis.client.Service();
 			Call call = (Call)service.createCall();
-			call.setPortTypeName(Client.serviceQN);
-			call.setOperationName(new QName(Client.AIRSERVICE_NAMESPACE, "bookTicket"));
+			call.setTargetEndpointAddress(new URL(Client.AIRSERVICE_URL));
+			call.setOperationName(new QName("bookTicket"));
+			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "");
 			call.setProperty(Call.SOAPACTION_USE_PROPERTY, new Boolean(true));
 			call.setProperty(Call.SOAPACTION_URI_PROPERTY, "");
 			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "http://schemas.xmlsoap.org/soap/encoding/");
@@ -146,14 +146,17 @@ public class Client {
 		String reservationId = st.nextToken();
 		String creditCardInfo = st.nextToken();
 		try{
+			org.apache.axis.client.Service service = new org.apache.axis.client.Service();
 			Call call = (Call)service.createCall();
-			call.setPortTypeName(Client.serviceQN);
-			call.setOperationName(new QName(Client.AIRSERVICE_NAMESPACE, "buyTicket"));
+			call.setTargetEndpointAddress(new URL(Client.AIRSERVICE_URL));
+			call.setOperationName(new QName("buyTicket"));
 			call.setProperty(Call.ENCODINGSTYLE_URI_PROPERTY, "");
-			call.addParameter("reservationId", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
-			call.addParameter("creditCardInfo", Client.serviceQN, javax.xml.rpc.ParameterMode.IN);
+			QName string = new QName("http://echo.demo.oracle/", "string");
+			call.addParameter("reservationId", string, String.class, javax.xml.rpc.ParameterMode.IN);
+			call.addParameter("creditCardInfo", string, String.class, javax.xml.rpc.ParameterMode.IN);
 			call.setTargetEndpointAddress(Client.AIRSERVICE_URL);
 			call.setReturnClass(String.class);
+
 			Object[] inParams = new Object[]{reservationId, creditCardInfo};
 
 			String ret = (String) call.invoke(inParams);
@@ -167,26 +170,6 @@ public class Client {
 		}
 	}
 
-	/**
-	 * Initiates the web service to be called by the client
-	 * This will create a service when the client starts,
-	 * used by all the client commands
-	 */
-	private static void initWebService() {
-		System.out.print("Initiating the WebService... ");
-		try{
-			Client.serviceQN = new QName(AIRSERVICE_NAMESPACE, AIRSERVICE_NAME);
-			ServiceFactory serviceFactory = ServiceFactory.newInstance();
-
-			// Create the static common service
-			Client.service = serviceFactory.createService(new
-					URL(Client.AIRSERVICE_URL), serviceQN);
-		} catch(Exception ex) {
-			System.out.println("Error on initiating webservice");
-			ex.printStackTrace();
-		}
-		System.out.println("WebService created");
-	}
 
 	public static void main (String [] args) {
 		System.out.println("Starting the client");
@@ -195,7 +178,6 @@ public class Client {
 
 		// Initiate the webservice
 		Client.AIRSERVICE_URL = args[0];
-		Client.initWebService();
 
 		// Build the command menu
 		Client.MENU = Client.SEPARATOR + "\n";
