@@ -42,7 +42,6 @@ TEMA 4
              bookTicket flightID1, flightId2, ... , flightIdn
              buyTicket reservationId, creditCardInfo
              !!!    URL-ul catre serviciu poate fi schimbat in build.xml la targetul client
-             !!!    Pentru apelarea serviciilor clientul foloseste un namespace si service name care sunt hardcoded in "src/airService/client/Client.java"
     *   ant admin: porneste aplicatia de administrare care ofera 2 comenzi:
             adaugare_Zbor source, destination, departureDay, departureHour, duration, numberOfSeats, flightId
             anulare_Zbor flightId
